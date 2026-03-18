@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
@@ -75,27 +75,41 @@ describe('Layout', () => {
     renderLayout()
     const user = userEvent.setup()
     await user.click(screen.getByLabelText('open menu'))
-    expect(screen.getByText('Select Golfer')).toBeInTheDocument()
+    expect(screen.getByText('New Game')).toBeInTheDocument()
   })
 
-  it('shows golfer list when "Select Golfer" is clicked', async () => {
+  it('opens the New Game modal when "New Game" is clicked', async () => {
     renderLayout()
     const user = userEvent.setup()
     await user.click(screen.getByLabelText('open menu'))
-    await user.click(screen.getByText('Select Golfer'))
-    const golferSubmenu = document.getElementById('golfer-submenu')
-    expect(golferSubmenu).toBeInTheDocument()
-    expect(screen.getByText('Player 1')).toBeInTheDocument()
-    expect(screen.getByText('Player 2')).toBeInTheDocument()
+    await user.click(screen.getByText('New Game'))
+    expect(
+      screen.getByText('New Game — Choose Your Golfer'),
+    ).toBeInTheDocument()
+    expect(screen.getByText("'Ace' O'Malley")).toBeInTheDocument()
+    expect(screen.getByText("'Boomer' Benson")).toBeInTheDocument()
   })
 
-  it('updates selected player and status bar when a golfer is selected', async () => {
+  it('updates selected player and status bar when a golfer card is clicked', async () => {
     renderLayout()
     const user = userEvent.setup()
     await user.click(screen.getByLabelText('open menu'))
-    await user.click(screen.getByText('Select Golfer'))
-    await user.click(screen.getByText('Player 1'))
-    expect(screen.getByText('P1')).toBeInTheDocument()
-    expect(screen.getByText(/Active golfer: Player 1/i)).toBeInTheDocument()
+    await user.click(screen.getByText('New Game'))
+    await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
+    expect(screen.getByLabelText('selected player icon')).toHaveTextContent('ACE')
+    expect(screen.getByText(/Active golfer: 'Ace' O'Malley/i)).toBeInTheDocument()
+  })
+
+  it('closes the modal after selecting a golfer', async () => {
+    renderLayout()
+    const user = userEvent.setup()
+    await user.click(screen.getByLabelText('open menu'))
+    await user.click(screen.getByText('New Game'))
+    await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
+    await waitFor(() => {
+      expect(
+        screen.queryByText('New Game — Choose Your Golfer'),
+      ).not.toBeInTheDocument()
+    })
   })
 })

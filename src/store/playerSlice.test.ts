@@ -21,29 +21,65 @@ function makeStore() {
 
 type TestState = ReturnType<ReturnType<typeof makeStore>['getState']>
 
+const sampleGolfer: Golfer = {
+  id: 'ace-omalley',
+  name: "'Ace' O'Malley",
+  initials: 'ACE',
+  archetype: 'The Veteran',
+  bio: "He's played every course twice.",
+  ui: {
+    primaryColor: '#2D5A27',
+    accentColor: '#F0EAD6',
+    icon: 'ace_omalley.png',
+    hexTheme: 'forest-green',
+  },
+  stats: { power: 2, accuracy: 5, recovery: 4 },
+  specialAbilities: [
+    { id: 'old-school', name: 'Old School Lore', effect: 'Negate one Wind modifier per hole.' },
+  ],
+}
+
 describe('playerSlice', () => {
   it('has null selectedPlayer by default', () => {
     const store = makeStore()
     expect(selectSelectedPlayer(store.getState() as TestState)).toBeNull()
   })
 
-  it('has a default list of available golfers', () => {
+  it('has 6 available golfers loaded from players.json', () => {
     const store = makeStore()
     const golfers = selectAvailableGolfers(store.getState() as TestState)
-    expect(golfers.length).toBeGreaterThan(0)
+    expect(golfers).toHaveLength(6)
+  })
+
+  it('available golfers have computed initials', () => {
+    const store = makeStore()
+    const golfers = selectAvailableGolfers(store.getState() as TestState)
+    golfers.forEach((g) => {
+      expect(g.initials).toBeTruthy()
+      expect(g.initials.length).toBeGreaterThan(0)
+    })
+  })
+
+  it('available golfers include all expected player ids', () => {
+    const store = makeStore()
+    const ids = selectAvailableGolfers(store.getState() as TestState).map((g) => g.id)
+    expect(ids).toContain('ace-omalley')
+    expect(ids).toContain('boomer-benson')
+    expect(ids).toContain('calamity-jane')
+    expect(ids).toContain('dimples-davis')
+    expect(ids).toContain('evie-eagle')
+    expect(ids).toContain('flop-ferguson')
   })
 
   it('sets the selected player via setSelectedPlayer action', () => {
     const store = makeStore()
-    const golfer: Golfer = { id: '1', name: 'Player 1', initials: 'P1' }
-    store.dispatch(setSelectedPlayer(golfer))
-    expect(selectSelectedPlayer(store.getState() as TestState)).toEqual(golfer)
+    store.dispatch(setSelectedPlayer(sampleGolfer))
+    expect(selectSelectedPlayer(store.getState() as TestState)).toEqual(sampleGolfer)
   })
 
   it('clears the selected player when null is dispatched', () => {
     const store = makeStore()
-    const golfer: Golfer = { id: '1', name: 'Player 1', initials: 'P1' }
-    store.dispatch(setSelectedPlayer(golfer))
+    store.dispatch(setSelectedPlayer(sampleGolfer))
     store.dispatch(setSelectedPlayer(null))
     expect(selectSelectedPlayer(store.getState() as TestState)).toBeNull()
   })

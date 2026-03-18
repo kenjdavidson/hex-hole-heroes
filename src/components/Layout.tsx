@@ -9,15 +9,10 @@ import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Outlet } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  selectSelectedPlayer,
-  selectAvailableGolfers,
-  setSelectedPlayer,
-} from '../store/playerSlice'
-import type { Golfer } from '../store/playerSlice'
+import { useSelector } from 'react-redux'
+import { selectSelectedPlayer } from '../store/playerSlice'
+import NewGameModal from './NewGameModal'
 
 import { green } from '@mui/material/colors'
 
@@ -26,35 +21,26 @@ const hexPatternSvg = encodeURIComponent(
 )
 
 export default function Layout() {
-  const dispatch = useDispatch()
   const selectedPlayer = useSelector(selectSelectedPlayer)
-  const availableGolfers = useSelector(selectAvailableGolfers)
 
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
-  const [golferSubMenuAnchor, setGolferSubMenuAnchor] =
-    useState<null | HTMLElement>(null)
+  const [newGameOpen, setNewGameOpen] = useState(false)
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget)
-    setGolferSubMenuAnchor(null)
   }
 
   const handleMenuClose = () => {
     setMenuAnchor(null)
-    setGolferSubMenuAnchor(null)
   }
 
-  const handleSelectGolferOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setGolferSubMenuAnchor(event.currentTarget)
-  }
-
-  const handleGolferSubMenuClose = () => {
-    setGolferSubMenuAnchor(null)
-  }
-
-  const handleGolferSelect = (golfer: Golfer) => {
-    dispatch(setSelectedPlayer(golfer))
+  const handleNewGameOpen = () => {
     handleMenuClose()
+    setNewGameOpen(true)
+  }
+
+  const handleNewGameClose = () => {
+    setNewGameOpen(false)
   }
 
   return (
@@ -73,7 +59,14 @@ export default function Layout() {
             }}
             aria-label="selected player icon"
           >
-            <HexagonIcon sx={{ fontSize: 40, color: 'primary.light' }} />
+            <HexagonIcon
+              sx={{
+                fontSize: 40,
+                color: selectedPlayer
+                  ? selectedPlayer.ui.primaryColor
+                  : 'primary.light',
+              }}
+            />
             <Typography
               variant="caption"
               sx={{
@@ -109,37 +102,13 @@ export default function Layout() {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            <MenuItem
-              onClick={handleSelectGolferOpen}
-              aria-haspopup="true"
-              aria-controls="golfer-submenu"
-            >
-              <ChevronLeftIcon fontSize="small" sx={{ mr: 1 }} />
-              <Typography>Select Golfer</Typography>
-            </MenuItem>
-          </Menu>
-
-          {/* Golfer flyout submenu */}
-          <Menu
-            id="golfer-submenu"
-            anchorEl={golferSubMenuAnchor}
-            open={Boolean(golferSubMenuAnchor)}
-            onClose={handleGolferSubMenuClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            {availableGolfers.map((golfer) => (
-              <MenuItem
-                key={golfer.id}
-                onClick={() => handleGolferSelect(golfer)}
-                selected={selectedPlayer?.id === golfer.id}
-              >
-                {golfer.name}
-              </MenuItem>
-            ))}
+            <MenuItem onClick={handleNewGameOpen}>New Game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
+
+      {/* New Game modal */}
+      <NewGameModal open={newGameOpen} onClose={handleNewGameClose} />
 
       {/* Main content: two panels */}
       <Box
