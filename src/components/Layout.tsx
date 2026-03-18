@@ -6,12 +6,10 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Divider from '@mui/material/Divider'
 import Paper from '@mui/material/Paper'
 import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Outlet } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -21,26 +19,37 @@ import {
 } from '../store/playerSlice'
 import type { Golfer } from '../store/playerSlice'
 
+import { green } from '@mui/material/colors'
+
+const hexPatternSvg = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="104" height="90"><g fill="none" stroke="${green[300]}" stroke-width="1.5"><polygon points="26,0 52,15 52,45 26,60 0,45 0,15"/><polygon points="78,0 104,15 104,45 78,60 52,45 52,15"/><line x1="26" y1="60" x2="26" y2="90"/><line x1="78" y1="60" x2="78" y2="90"/></g></svg>`,
+)
+
 export default function Layout() {
   const dispatch = useDispatch()
   const selectedPlayer = useSelector(selectSelectedPlayer)
   const availableGolfers = useSelector(selectAvailableGolfers)
 
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
-  const [golferMenuOpen, setGolferMenuOpen] = useState(false)
+  const [golferSubMenuAnchor, setGolferSubMenuAnchor] =
+    useState<null | HTMLElement>(null)
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget)
-    setGolferMenuOpen(false)
+    setGolferSubMenuAnchor(null)
   }
 
   const handleMenuClose = () => {
     setMenuAnchor(null)
-    setGolferMenuOpen(false)
+    setGolferSubMenuAnchor(null)
   }
 
-  const handleSelectGolferToggle = () => {
-    setGolferMenuOpen((prev) => !prev)
+  const handleSelectGolferOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setGolferSubMenuAnchor(event.currentTarget)
+  }
+
+  const handleGolferSubMenuClose = () => {
+    setGolferSubMenuAnchor(null)
   }
 
   const handleGolferSelect = (golfer: Golfer) => {
@@ -100,22 +109,34 @@ export default function Layout() {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleSelectGolferToggle}>
-              <Typography sx={{ flexGrow: 1 }}>Select Golfer</Typography>
-              {golferMenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            <MenuItem
+              onClick={handleSelectGolferOpen}
+              aria-haspopup="true"
+              aria-controls="golfer-submenu"
+            >
+              <ChevronLeftIcon fontSize="small" sx={{ mr: 1 }} />
+              <Typography>Select Golfer</Typography>
             </MenuItem>
-            {golferMenuOpen && <Divider />}
-            {golferMenuOpen &&
-              availableGolfers.map((golfer) => (
-                <MenuItem
-                  key={golfer.id}
-                  onClick={() => handleGolferSelect(golfer)}
-                  selected={selectedPlayer?.id === golfer.id}
-                  sx={{ pl: 4 }}
-                >
-                  {golfer.name}
-                </MenuItem>
-              ))}
+          </Menu>
+
+          {/* Golfer flyout submenu */}
+          <Menu
+            id="golfer-submenu"
+            anchorEl={golferSubMenuAnchor}
+            open={Boolean(golferSubMenuAnchor)}
+            onClose={handleGolferSubMenuClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            {availableGolfers.map((golfer) => (
+              <MenuItem
+                key={golfer.id}
+                onClick={() => handleGolferSelect(golfer)}
+                selected={selectedPlayer?.id === golfer.id}
+              >
+                {golfer.name}
+              </MenuItem>
+            ))}
           </Menu>
         </Toolbar>
       </AppBar>
@@ -132,6 +153,9 @@ export default function Layout() {
           sx={{
             flex: 2,
             overflow: 'auto',
+            backgroundImage: `url("data:image/svg+xml,${hexPatternSvg}")`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '104px 90px',
             bgcolor: 'background.default',
             borderRight: 1,
             borderColor: 'divider',

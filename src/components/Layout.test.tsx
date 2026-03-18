@@ -83,6 +83,8 @@ describe('Layout', () => {
     const user = userEvent.setup()
     await user.click(screen.getByLabelText('open menu'))
     await user.click(screen.getByText('Select Golfer'))
+    const golferSubmenu = document.getElementById('golfer-submenu')
+    expect(golferSubmenu).toBeInTheDocument()
     expect(screen.getByText('Player 1')).toBeInTheDocument()
     expect(screen.getByText('Player 2')).toBeInTheDocument()
   })

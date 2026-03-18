@@ -5,10 +5,18 @@ import playerReducer, {
   selectAvailableGolfers,
 } from './playerSlice'
 import { configureStore } from '@reduxjs/toolkit'
+import { apiSlice } from './apiSlice'
 import type { Golfer } from './playerSlice'
 
 function makeStore() {
-  return configureStore({ reducer: { player: playerReducer } })
+  return configureStore({
+    reducer: {
+      [apiSlice.reducerPath]: apiSlice.reducer,
+      player: playerReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(apiSlice.middleware),
+  })
 }
 
 type TestState = ReturnType<ReturnType<typeof makeStore>['getState']>
