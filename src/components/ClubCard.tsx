@@ -1,12 +1,7 @@
 import Box from '@mui/material/Box'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { Club, ClubType } from '../types/club'
-
-interface ClubCardProps {
-  club: Club
-  selected?: boolean
-  onClick?: (club: Club) => void
-}
 
 const TYPE_COLORS: Record<ClubType, { bg: string; text: string; border: string }> = {
   Wood: { bg: '#4E342E', text: '#FFCC80', border: '#8D6E63' },
@@ -15,63 +10,30 @@ const TYPE_COLORS: Record<ClubType, { bg: string; text: string; border: string }
   Putter: { bg: '#1A237E', text: '#C5CAE9', border: '#3949AB' },
 }
 
-export default function ClubCard({
-  club,
-  selected = false,
-  onClick,
-}: ClubCardProps) {
+const CARD_WIDTH = 44
+const CARD_HEIGHT = 88
+
+/** Full card details rendered inside the hover Tooltip */
+function ClubDetail({ club }: { club: Club }) {
   const colors = TYPE_COLORS[club.type]
   const [distMin, distMax] = club.dist
   const distLabel = distMin === distMax ? `${distMin}` : `${distMin}–${distMax}`
 
-  const handleClick = () => {
-    onClick?.(club)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleClick()
-    }
-  }
-
   return (
     <Box
-      role="button"
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      aria-label={`${club.name}, ${club.type}, distance ${distLabel} hexes`}
-      aria-pressed={selected}
       sx={{
-        width: 108,
+        width: 160,
         borderRadius: 1.5,
-        border: `2px solid ${selected ? colors.text : colors.border}`,
+        border: `2px solid ${colors.border}`,
         bgcolor: colors.bg,
-        cursor: onClick ? 'pointer' : 'default',
-        userSelect: 'none',
-        transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-        ...(onClick && {
-          '&:hover': {
-            transform: 'scale(1.05)',
-            boxShadow: `0 4px 12px ${colors.border}88`,
-          },
-        }),
-        ...(selected && {
-          boxShadow: `0 0 10px ${colors.text}88`,
-        }),
-        '&:focus-visible': {
-          outline: `3px solid ${colors.text}`,
-          outlineOffset: 2,
-        },
+        overflow: 'hidden',
       }}
     >
-      {/* Header row: club ID + type */}
       <Box
         sx={{
-          px: 1,
-          pt: 0.75,
-          pb: 0.25,
+          px: 1.5,
+          pt: 1,
+          pb: 0.5,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'baseline',
@@ -81,103 +43,68 @@ export default function ClubCard({
           component="span"
           sx={{
             fontWeight: 900,
-            fontSize: '1rem',
+            fontSize: '1.1rem',
             color: colors.text,
-            letterSpacing: 1,
             textTransform: 'uppercase',
+            letterSpacing: 1,
           }}
         >
           {club.id}
         </Typography>
         <Typography
           component="span"
-          sx={{
-            fontSize: '0.55rem',
-            color: colors.text,
-            opacity: 0.7,
-            textTransform: 'uppercase',
-            letterSpacing: 0.5,
-          }}
+          sx={{ fontSize: '0.6rem', color: colors.text, opacity: 0.7, textTransform: 'uppercase' }}
         >
           {club.type}
         </Typography>
       </Box>
 
-      {/* Divider */}
-      <Box sx={{ mx: 1, borderBottom: `1px solid ${colors.border}` }} />
+      <Box sx={{ mx: 1.5, borderBottom: `1px solid ${colors.border}` }} />
 
-      {/* Club name */}
-      <Box sx={{ px: 1, pt: 0.5 }}>
+      <Box sx={{ px: 1.5, pt: 0.75 }}>
         <Typography
-          variant="caption"
-          sx={{
-            display: 'block',
-            fontWeight: 600,
-            fontSize: '0.6rem',
-            color: colors.text,
-            lineHeight: 1.3,
-          }}
+          component="span"
+          sx={{ display: 'block', fontWeight: 600, fontSize: '0.75rem', color: colors.text, mb: 0.5 }}
         >
           {club.name}
         </Typography>
-      </Box>
 
-      {/* Distance */}
-      <Box
-        sx={{
-          px: 1,
-          pt: 0.5,
-          display: 'flex',
-          alignItems: 'baseline',
-          gap: 0.5,
-        }}
-      >
-        <Typography
-          component="span"
-          sx={{ fontWeight: 700, fontSize: '1rem', color: colors.text, lineHeight: 1 }}
-        >
-          {distLabel}
-        </Typography>
-        <Typography
-          component="span"
-          sx={{ fontSize: '0.55rem', color: colors.text, opacity: 0.7 }}
-        >
-          hex
-        </Typography>
-      </Box>
-
-      {/* Scatter (only shown when > 0) */}
-      {club.scatter > 0 && (
-        <Box sx={{ px: 1, pb: 0.25, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
           <Typography
             component="span"
-            sx={{ fontSize: '0.55rem', color: colors.text, opacity: 0.7 }}
+            sx={{ fontWeight: 700, fontSize: '1.2rem', color: colors.text, lineHeight: 1 }}
           >
-            scatter:
+            {distLabel}
           </Typography>
-          <Typography
-            component="span"
-            sx={{ fontWeight: 700, fontSize: '0.7rem', color: colors.text }}
-          >
-            {club.scatter}
+          <Typography component="span" sx={{ fontSize: '0.65rem', color: colors.text, opacity: 0.7 }}>
+            hex
           </Typography>
         </Box>
-      )}
 
-      {/* Ability (shown when present) */}
+        {club.scatter > 0 && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25 }}>
+            <Typography component="span" sx={{ fontSize: '0.65rem', color: colors.text, opacity: 0.7 }}>
+              scatter:
+            </Typography>
+            <Typography component="span" sx={{ fontWeight: 700, fontSize: '0.75rem', color: colors.text }}>
+              {club.scatter}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
       {club.ability && (
         <>
-          <Box sx={{ mx: 1, mt: 0.5, borderBottom: `1px solid ${colors.border}`, opacity: 0.5 }} />
-          <Box sx={{ px: 1, pt: 0.5, pb: 0.75 }}>
+          <Box sx={{ mx: 1.5, mt: 0.75, borderBottom: `1px solid ${colors.border}`, opacity: 0.5 }} />
+          <Box sx={{ px: 1.5, pt: 0.5, pb: 1 }}>
             <Typography
-              variant="caption"
+              component="span"
               sx={{
                 display: 'block',
-                fontSize: '0.55rem',
+                fontSize: '0.65rem',
                 color: colors.text,
                 fontStyle: 'italic',
                 lineHeight: 1.35,
-                opacity: 0.9,
               }}
             >
               ★ {club.ability}
@@ -185,9 +112,66 @@ export default function ClubCard({
           </Box>
         </>
       )}
-
-      {/* Bottom padding when no ability */}
-      {!club.ability && <Box sx={{ pb: 0.75 }} />}
+      {!club.ability && <Box sx={{ pb: 1 }} />}
     </Box>
+  )
+}
+
+interface ClubCardProps {
+  club: Club
+}
+
+export default function ClubCard({ club }: ClubCardProps) {
+  const colors = TYPE_COLORS[club.type]
+  const [distMin, distMax] = club.dist
+  const distLabel = distMin === distMax ? `${distMin}` : `${distMin}–${distMax}`
+
+  return (
+    <Tooltip
+      title={<ClubDetail club={club} />}
+      placement="top"
+      enterDelay={150}
+      enterNextDelay={150}
+      slotProps={{
+        tooltip: { sx: { p: 0, bgcolor: 'transparent', boxShadow: 'none', maxWidth: 'none' } },
+      }}
+    >
+      <Box
+        tabIndex={0}
+        aria-label={`${club.name}, ${club.type}, distance ${distLabel} hexes`}
+        sx={{
+          width: CARD_WIDTH,
+          height: CARD_HEIGHT,
+          bgcolor: colors.bg,
+          border: `2px solid ${colors.border}`,
+          borderRadius: 1,
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          pt: 1,
+          cursor: 'default',
+          userSelect: 'none',
+          transition: 'transform 0.15s ease',
+          '&:hover, &:focus-visible': {
+            transform: 'translateY(-10px)',
+            outline: 'none',
+          },
+        }}
+      >
+        <Typography
+          component="span"
+          sx={{
+            fontWeight: 900,
+            fontSize: '0.8rem',
+            color: colors.text,
+            textTransform: 'uppercase',
+            letterSpacing: 0.5,
+            lineHeight: 1,
+          }}
+        >
+          {club.id}
+        </Typography>
+      </Box>
+    </Tooltip>
   )
 }

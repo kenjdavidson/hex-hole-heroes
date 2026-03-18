@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Club } from '../types/club'
@@ -32,91 +32,79 @@ const noAbilityClub: Club = {
 }
 
 describe('ClubCard', () => {
-  it('renders the club name', () => {
-    render(<ClubCard club={woodClub} />)
-    expect(screen.getByText('Driver')).toBeInTheDocument()
-  })
-
-  it('renders the club ID in uppercase', () => {
+  it('renders the club ID in the stub', () => {
     render(<ClubCard club={woodClub} />)
     expect(screen.getByText('dr')).toBeInTheDocument()
   })
 
-  it('renders the club type', () => {
-    render(<ClubCard club={woodClub} />)
-    expect(screen.getByText('Wood')).toBeInTheDocument()
-  })
-
-  it('renders distance range when min and max differ', () => {
-    render(<ClubCard club={woodClub} />)
-    expect(screen.getByText('12–15')).toBeInTheDocument()
-  })
-
-  it('renders single distance value when min equals max', () => {
-    render(<ClubCard club={ironClub} />)
-    expect(screen.getByText('5')).toBeInTheDocument()
-  })
-
-  it('renders scatter value when scatter > 0', () => {
-    render(<ClubCard club={woodClub} />)
-    expect(screen.getByText('2')).toBeInTheDocument()
-  })
-
-  it('does not render scatter section when scatter is 0', () => {
-    render(<ClubCard club={ironClub} />)
-    expect(screen.queryByText('scatter:')).not.toBeInTheDocument()
-  })
-
-  it('renders ability text when present', () => {
-    render(<ClubCard club={woodClub} />)
-    expect(screen.getByText(/Power Draw/)).toBeInTheDocument()
-  })
-
-  it('does not render ability section when ability is null', () => {
-    render(<ClubCard club={noAbilityClub} />)
-    expect(screen.queryByText(/★/)).not.toBeInTheDocument()
-  })
-
-  it('has an accessible role of button', () => {
+  it('has an accessible aria-label with name, type, and distance range', () => {
     render(<ClubCard club={woodClub} />)
     expect(
-      screen.getByRole('button', { name: /Driver, Wood/ }),
+      screen.getByLabelText('Driver, Wood, distance 12–15 hexes'),
     ).toBeInTheDocument()
   })
 
-  it('reflects selected state via aria-pressed', () => {
-    render(<ClubCard club={woodClub} selected />)
-    expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true')
+  it('has an accessible aria-label with single distance when min equals max', () => {
+    render(<ClubCard club={ironClub} />)
+    expect(
+      screen.getByLabelText('7-Iron, Iron, distance 5 hexes'),
+    ).toBeInTheDocument()
   })
 
-  it('reflects unselected state via aria-pressed when not selected', () => {
-    render(<ClubCard club={woodClub} selected={false} />)
-    expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'false')
+  it('is keyboard focusable', () => {
+    render(<ClubCard club={woodClub} />)
+    expect(screen.getByLabelText(/Driver/)).toHaveAttribute('tabindex', '0')
   })
 
-  it('calls onClick with the club when clicked', async () => {
-    const handleClick = vi.fn()
-    render(<ClubCard club={woodClub} onClick={handleClick} />)
+  it('shows full club name in tooltip on hover', async () => {
     const user = userEvent.setup()
-    await user.click(screen.getByRole('button'))
-    expect(handleClick).toHaveBeenCalledWith(woodClub)
+    render(<ClubCard club={woodClub} />)
+    await user.hover(screen.getByLabelText(/Driver/))
+    expect(await screen.findByText('Driver')).toBeInTheDocument()
   })
 
-  it('activates via keyboard Enter', async () => {
-    const handleClick = vi.fn()
-    render(<ClubCard club={woodClub} onClick={handleClick} />)
+  it('shows full club name in tooltip on keyboard focus', async () => {
     const user = userEvent.setup()
-    screen.getByRole('button').focus()
-    await user.keyboard('{Enter}')
-    expect(handleClick).toHaveBeenCalledWith(woodClub)
+    render(<ClubCard club={woodClub} />)
+    await user.tab()
+    expect(await screen.findByText('Driver')).toBeInTheDocument()
   })
 
-  it('activates via keyboard Space', async () => {
-    const handleClick = vi.fn()
-    render(<ClubCard club={woodClub} onClick={handleClick} />)
+  it('shows distance range in tooltip on hover', async () => {
     const user = userEvent.setup()
-    screen.getByRole('button').focus()
-    await user.keyboard(' ')
-    expect(handleClick).toHaveBeenCalledWith(woodClub)
+    render(<ClubCard club={woodClub} />)
+    await user.hover(screen.getByLabelText(/Driver/))
+    expect(await screen.findByText('12–15')).toBeInTheDocument()
+  })
+
+  it('shows scatter in tooltip when scatter > 0', async () => {
+    const user = userEvent.setup()
+    render(<ClubCard club={woodClub} />)
+    await user.hover(screen.getByLabelText(/Driver/))
+    await screen.findByText('Driver') // wait for tooltip
+    expect(screen.getByText('2')).toBeInTheDocument()
+  })
+
+  it('shows ability in tooltip when present', async () => {
+    const user = userEvent.setup()
+    render(<ClubCard club={woodClub} />)
+    await user.hover(screen.getByLabelText(/Driver/))
+    expect(await screen.findByText(/Power Draw/)).toBeInTheDocument()
+  })
+
+  it('does not show scatter when scatter is 0', async () => {
+    const user = userEvent.setup()
+    render(<ClubCard club={ironClub} />)
+    await user.hover(screen.getByLabelText(/7-Iron/))
+    await screen.findByText('7-Iron') // wait for tooltip
+    expect(screen.queryByText('scatter:')).not.toBeInTheDocument()
+  })
+
+  it('does not show ability star when ability is null', async () => {
+    const user = userEvent.setup()
+    render(<ClubCard club={noAbilityClub} />)
+    await user.hover(screen.getByLabelText(/4-Iron/))
+    await screen.findByText('4-Iron') // wait for tooltip
+    expect(screen.queryByText(/★/)).not.toBeInTheDocument()
   })
 })

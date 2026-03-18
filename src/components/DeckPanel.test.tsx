@@ -29,27 +29,27 @@ describe('DeckPanel', () => {
     expect(screen.getByText('Your Bag')).toBeInTheDocument()
   })
 
-  it('renders all four club type section headings', () => {
+  it('renders all 14 club stubs in a single row', () => {
     renderWithStore(<DeckPanel />)
-    expect(screen.getByText('Woods')).toBeInTheDocument()
-    expect(screen.getByText('Irons')).toBeInTheDocument()
-    expect(screen.getByText('Wedges')).toBeInTheDocument()
-    expect(screen.getByText('Putters')).toBeInTheDocument()
+    const stubs = screen.getAllByLabelText(/distance .+ hexes/)
+    expect(stubs).toHaveLength(14)
   })
 
-  it('renders all 14 club cards', () => {
+  it('does not render type section headings', () => {
     renderWithStore(<DeckPanel />)
-    const cards = screen.getAllByRole('button')
-    expect(cards).toHaveLength(14)
+    expect(screen.queryByText('Woods')).not.toBeInTheDocument()
+    expect(screen.queryByText('Irons')).not.toBeInTheDocument()
+    expect(screen.queryByText('Wedges')).not.toBeInTheDocument()
+    expect(screen.queryByText('Putters')).not.toBeInTheDocument()
   })
 
-  it('renders the Driver card', () => {
+  it('renders the Driver stub', () => {
     renderWithStore(<DeckPanel />)
-    expect(screen.getByText('Driver')).toBeInTheDocument()
+    expect(screen.getByLabelText(/Driver, Wood/)).toBeInTheDocument()
   })
 
-  it('renders the Putter card', () => {
+  it('renders the Putter stub', () => {
     renderWithStore(<DeckPanel />)
-    expect(screen.getAllByText('Putter').length).toBeGreaterThan(0)
+    expect(screen.getByLabelText(/Putter, Putter/)).toBeInTheDocument()
   })
 })

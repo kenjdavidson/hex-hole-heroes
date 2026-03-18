@@ -1,41 +1,36 @@
 import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { useSelector } from 'react-redux'
 import { selectAllClubs } from '../store/deckSlice'
 import ClubCard from './ClubCard'
-import type { ClubType } from '../types/club'
 
-const CLUB_TYPE_ORDER: ClubType[] = ['Wood', 'Iron', 'Wedge', 'Putter']
+/** How many px each card slides under the previous one */
+const CARD_OVERLAP = 18
 
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, pb: 3 }}>
       <Typography variant="h6" gutterBottom>
         Your Bag
       </Typography>
-      {CLUB_TYPE_ORDER.map((type) => {
-        const clubsOfType = clubs.filter((c) => c.type === type)
-        if (clubsOfType.length === 0) return null
-        return (
-          <Box key={type} sx={{ mb: 1.5 }}>
-            <Typography
-              variant="overline"
-              sx={{ display: 'block', color: 'text.secondary', lineHeight: 1.8 }}
-            >
-              {type}s
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {clubsOfType.map((club) => (
-                <ClubCard key={club.id} club={club} />
-              ))}
-            </Box>
-            <Divider sx={{ mt: 1.5 }} />
+      <Box sx={{ display: 'flex', position: 'relative', pt: 1.5 }}>
+        {clubs.map((club, idx) => (
+          <Box
+            key={club.id}
+            sx={{
+              ml: idx === 0 ? 0 : `-${CARD_OVERLAP}px`,
+              position: 'relative',
+              zIndex: idx + 1,
+              '&:hover': { zIndex: 100 },
+              '&:focus-within': { zIndex: 100 },
+            }}
+          >
+            <ClubCard club={club} />
           </Box>
-        )
-      })}
+        ))}
+      </Box>
     </Box>
   )
 }
