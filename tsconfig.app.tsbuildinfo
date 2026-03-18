@@ -1,1 +1,0 @@
-{"root":["./src/App.test.tsx","./src/App.tsx","./src/main.tsx","./src/setupTests.ts","./src/components/Layout.tsx","./src/pages/HomePage.tsx","./src/pages/NotFoundPage.tsx","./src/store/apiSlice.ts","./src/store/index.ts"],"version":"5.6.3"}
