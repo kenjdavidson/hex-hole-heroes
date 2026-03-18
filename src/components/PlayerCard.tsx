@@ -9,8 +9,10 @@ interface PlayerCardProps {
 }
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
-const CARD_WIDTH = 168
-const CARD_HEIGHT = 194
+// For a flat-top regular hexagon using polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%),
+// all 6 sides are equal when H = W × (√3 / 2).
+const CARD_WIDTH = 200
+const CARD_HEIGHT = Math.round(CARD_WIDTH * (Math.sqrt(3) / 2)) // ≈ 173
 const BORDER_WIDTH = 7
 
 export default function PlayerCard({
