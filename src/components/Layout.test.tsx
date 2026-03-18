@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
+import deckReducer from '../store/deckSlice'
 import theme from '../theme'
 import Layout from './Layout'
 
@@ -15,6 +16,7 @@ function makeStore() {
     reducer: {
       [apiSlice.reducerPath]: apiSlice.reducer,
       player: playerReducer,
+      deck: deckReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),
@@ -59,10 +61,10 @@ describe('Layout', () => {
     expect(screen.getByLabelText('board panel')).toBeInTheDocument()
   })
 
-  it('renders the scorecard panel', () => {
+  it('renders the scorecard panel with the club bag', () => {
     renderLayout()
     expect(screen.getByLabelText('scorecard panel')).toBeInTheDocument()
-    expect(screen.getByText('Scorecard')).toBeInTheDocument()
+    expect(screen.getByText('Your Bag')).toBeInTheDocument()
   })
 
   it('renders the status bar', () => {

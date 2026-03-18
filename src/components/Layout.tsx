@@ -13,6 +13,7 @@ import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectSelectedGolfer } from '../store/playerSlice'
 import NewGameModal from './NewGameModal'
+import DeckPanel from './DeckPanel'
 
 import { green } from '@mui/material/colors'
 
@@ -141,14 +142,7 @@ export default function Layout() {
           sx={{ flex: 1, overflow: 'auto', bgcolor: 'background.paper' }}
           aria-label="scorecard panel"
         >
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Scorecard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Scores will appear here.
-            </Typography>
-          </Box>
+          <DeckPanel />
         </Paper>
       </Box>
 

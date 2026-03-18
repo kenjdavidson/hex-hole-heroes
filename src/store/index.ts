@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from './apiSlice'
 import playerReducer from './playerSlice'
+import deckReducer from './deckSlice'
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     player: playerReducer,
+    deck: deckReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
