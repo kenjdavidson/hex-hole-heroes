@@ -1,41 +1,49 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './index'
+import playersData from '../data/players.json'
+import type { Golfer } from '../types/player'
 
-export interface Golfer {
-  id: string
-  name: string
-  initials: string
-}
+export type { Golfer, SpecialAbility, PlayerUI, PlayerStats } from '../types/player'
 
 interface PlayerState {
-  selectedPlayer: Golfer | null
+  selectedGolfer: Golfer | null
   availableGolfers: Golfer[]
 }
 
+function computeInitials(name: string): string {
+  const match = name.match(/'([^']+)'/)
+  if (match) return match[1].slice(0, 3).toUpperCase()
+  return name
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase()
+}
+
 const initialState: PlayerState = {
-  selectedPlayer: null,
-  availableGolfers: [
-    { id: '1', name: 'Player 1', initials: 'P1' },
-    { id: '2', name: 'Player 2', initials: 'P2' },
-    { id: '3', name: 'Player 3', initials: 'P3' },
-    { id: '4', name: 'Player 4', initials: 'P4' },
-  ],
+  selectedGolfer: null,
+  availableGolfers: playersData.players.map((p) => ({
+    ...p,
+    initials: computeInitials(p.name),
+  })),
 }
 
 const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
-    setSelectedPlayer(state, action: PayloadAction<Golfer | null>) {
-      state.selectedPlayer = action.payload
+    setSelectedGolfer(state, action: PayloadAction<Golfer | null>) {
+      state.selectedGolfer = action.payload
     },
   },
 })
 
-export const { setSelectedPlayer } = playerSlice.actions
+export const { setSelectedGolfer } = playerSlice.actions
 
-export const selectSelectedPlayer = (state: RootState) =>
-  state.player.selectedPlayer
+export const selectSelectedGolfer = (state: RootState) =>
+  state.player.selectedGolfer
 
 export const selectAvailableGolfers = (state: RootState) =>
   state.player.availableGolfers

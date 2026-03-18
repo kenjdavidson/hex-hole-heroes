@@ -1,0 +1,154 @@
+{
+  "players": [
+    {
+      "id": "ace-omalley",
+      "name": "'Ace' O'Malley",
+      "archetype": "The Veteran",
+      "bio": "He's played every course twice. What he lacks in distance, he makes up for in wisdom and stories.",
+      "ui": {
+        "primaryColor": "#2D5A27",
+        "accentColor": "#F0EAD6",
+        "icon": "ace_omalley.png",
+        "hexTheme": "forest-green"
+      },
+      "stats": { "power": 2, "accuracy": 5, "recovery": 4 },
+      "specialAbilities": [
+        {
+          "id": "old-school",
+          "name": "Old School Lore",
+          "effect": "Negate one Wind modifier per hole."
+        },
+        {
+          "id": "straight-shooter",
+          "name": "Straight Shooter",
+          "effect": "Ignore the first Scatter Die roll if using an Iron."
+        }
+      ]
+    },
+    {
+      "id": "boomer-benson",
+      "name": "'Boomer' Benson",
+      "archetype": "The Long Bomber",
+      "bio": "Physics is just a suggestion. If the ball isn't screaming, he didn't hit it hard enough.",
+      "ui": {
+        "primaryColor": "#B22222",
+        "accentColor": "#FFD700",
+        "icon": "boomer_benson.png",
+        "hexTheme": "fire-red"
+      },
+      "stats": { "power": 5, "accuracy": 2, "recovery": 3 },
+      "specialAbilities": [
+        {
+          "id": "crush-it",
+          "name": "Crush It",
+          "effect": "+3 Hex Distance on any Driver shot."
+        },
+        {
+          "id": "adrenaline",
+          "name": "Adrenaline Hit",
+          "effect": "Can re-roll one Scatter Die if the target is Fairway."
+        }
+      ]
+    },
+    {
+      "id": "calamity-jane",
+      "name": "'Calamity' Jane",
+      "archetype": "The Scrambler",
+      "bio": "She spends more time in the woods than on the fairway, but somehow always finds the cup.",
+      "ui": {
+        "primaryColor": "#6A5ACD",
+        "accentColor": "#E6E6FA",
+        "icon": "calamity_jane.png",
+        "hexTheme": "royal-purple"
+      },
+      "stats": { "power": 3, "accuracy": 3, "recovery": 5 },
+      "specialAbilities": [
+        {
+          "id": "miracle-wedge",
+          "name": "Miracle Wedge",
+          "effect": "No distance penalty when shooting from the Rough."
+        },
+        {
+          "id": "scramble",
+          "name": "The Scramble",
+          "effect": "If in a Hazard, you may draw 2 Club Cards and pick 1."
+        }
+      ]
+    },
+    {
+      "id": "dimples-davis",
+      "name": "'Dimples' Davis",
+      "archetype": "The Technician",
+      "bio": "Calculates wind resistance and grass friction before every swing. A true student of the game.",
+      "ui": {
+        "primaryColor": "#4682B4",
+        "accentColor": "#FFFFFF",
+        "icon": "dimples_davis.png",
+        "hexTheme": "sky-blue"
+      },
+      "stats": { "power": 3, "accuracy": 5, "recovery": 2 },
+      "specialAbilities": [
+        {
+          "id": "data-point",
+          "name": "Data Point",
+          "effect": "Can preview the result of one Scatter Die before committing."
+        },
+        {
+          "id": "perfect-spin",
+          "name": "Perfect Spin",
+          "effect": "Choose to move 1 Hex forward or back after landing on Green."
+        }
+      ]
+    },
+    {
+      "id": "evie-eagle",
+      "name": "'Evie' Eagle",
+      "archetype": "The Prodigy",
+      "bio": "Young, fast, and fearless. She doesn't play the course; she attacks it.",
+      "ui": {
+        "primaryColor": "#008B8B",
+        "accentColor": "#F5F5DC",
+        "icon": "evie_eagle.png",
+        "hexTheme": "teal-eagle"
+      },
+      "stats": { "power": 4, "accuracy": 4, "recovery": 2 },
+      "specialAbilities": [
+        {
+          "id": "eagle-eye",
+          "name": "Eagle Eye",
+          "effect": "Ignore 'Trees' or 'Bushes' obstacles for one shot per hole."
+        },
+        {
+          "id": "momentum",
+          "name": "Momentum",
+          "effect": "If the previous shot was on Fairway, next shot gets +1 Accuracy."
+        }
+      ]
+    },
+    {
+      "id": "flop-ferguson",
+      "name": "'Flop' Ferguson",
+      "archetype": "The Soft Touch",
+      "bio": "He might not reach the green in two, but his short game is pure magic.",
+      "ui": {
+        "primaryColor": "#DAA520",
+        "accentColor": "#556B2F",
+        "icon": "flop_ferguson.png",
+        "hexTheme": "gold-leaf"
+      },
+      "stats": { "power": 2, "accuracy": 4, "recovery": 4 },
+      "specialAbilities": [
+        {
+          "id": "flop-shot",
+          "name": "The Signature Flop",
+          "effect": "Wedge shots can ignore the first row of Rough near Green."
+        },
+        {
+          "id": "ice-veins",
+          "name": "Ice in the Veins",
+          "effect": "Automatic success on Putts within 2 Hexes of the hole."
+        }
+      ]
+    }
+  ]
+}
