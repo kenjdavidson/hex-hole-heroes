@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "starting_bag": [
+    { "id": "dr", "name": "Driver", "type": "Wood", "dist": [12, 15], "scatter": 2, "ability": "Power Draw: +2 Hexes on Fairway" },
+    { "id": "3w", "name": "3-Wood", "type": "Wood", "dist": [10, 12], "scatter": 1, "ability": "Fairway Finder: Negate 1 Wind" },
+    { "id": "5w", "name": "5-Wood", "type": "Wood", "dist": [9, 11], "scatter": 1, "ability": "High Launch: Ignore Trees" },
+    { "id": "3i", "name": "3-Iron", "type": "Iron", "dist": [9, 9], "scatter": 1, "ability": "Stinger: Ignore Wind" },
+    { "id": "4i", "name": "4-Iron", "type": "Iron", "dist": [8, 8], "scatter": 1, "ability": null },
+    { "id": "5i", "name": "5-Iron", "type": "Iron", "dist": [7, 7], "scatter": 1, "ability": null },
+    { "id": "6i", "name": "6-Iron", "type": "Iron", "dist": [6, 6], "scatter": 1, "ability": null },
+    { "id": "7i", "name": "7-Iron", "type": "Iron", "dist": [5, 5], "scatter": 0, "ability": "Backspin: Move 1 hex back on Green" },
+    { "id": "8i", "name": "8-Iron", "type": "Iron", "dist": [4, 4], "scatter": 0, "ability": null },
+    { "id": "9i", "name": "9-Iron", "type": "Iron", "dist": [3, 3], "scatter": 0, "ability": "Drop & Stop: No roll-out on Green" },
+    { "id": "pw", "name": "Pitching Wedge", "type": "Wedge", "dist": [2, 3], "scatter": 0, "ability": null },
+    { "id": "gw", "name": "Gap Wedge", "type": "Wedge", "dist": [2, 2], "scatter": 0, "ability": "Approach: +1 Accuracy Die" },
+    { "id": "sw", "name": "Sand Wedge", "type": "Wedge", "dist": [1, 2], "scatter": 0, "ability": "Bunker King: Exit Sand easily" },
+    { "id": "pt", "name": "Putter", "type": "Putter", "dist": [1, 5], "scatter": 0, "ability": "Green Only: Accuracy Die logic" }
+  ]
+}
