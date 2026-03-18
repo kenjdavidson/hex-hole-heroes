@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import type { Golfer } from '../store/playerSlice'
+import type { Golfer } from '../types/player'
 
 interface PlayerCardProps {
   golfer: Golfer

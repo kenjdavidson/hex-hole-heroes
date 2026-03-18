@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
 import { Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectSelectedPlayer } from '../store/playerSlice'
+import { selectSelectedGolfer } from '../store/playerSlice'
 import NewGameModal from './NewGameModal'
 
 import { green } from '@mui/material/colors'
@@ -21,7 +21,7 @@ const hexPatternSvg = encodeURIComponent(
 )
 
 export default function Layout() {
-  const selectedPlayer = useSelector(selectSelectedPlayer)
+  const selectedGolfer = useSelector(selectSelectedGolfer)
 
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const [newGameOpen, setNewGameOpen] = useState(false)
@@ -62,8 +62,8 @@ export default function Layout() {
             <HexagonIcon
               sx={{
                 fontSize: 40,
-                color: selectedPlayer
-                  ? selectedPlayer.ui.primaryColor
+                color: selectedGolfer
+                  ? selectedGolfer.ui.primaryColor
                   : 'primary.light',
               }}
             />
@@ -78,7 +78,7 @@ export default function Layout() {
                 userSelect: 'none',
               }}
             >
-              {selectedPlayer ? selectedPlayer.initials : '?'}
+              {selectedGolfer ? selectedGolfer.initials : '?'}
             </Typography>
           </Box>
 
@@ -167,8 +167,8 @@ export default function Layout() {
         aria-label="status bar"
       >
         <Typography variant="caption">
-          {selectedPlayer
-            ? `Active golfer: ${selectedPlayer.name}`
+          {selectedGolfer
+            ? `Active golfer: ${selectedGolfer.name}`
             : 'No golfer selected'}
         </Typography>
       </Box>

@@ -63,12 +63,12 @@ describe('NewGameModal', () => {
     expect(closed).toBe(true)
   })
 
-  it('dispatches selected player and calls onClose when a card is clicked', async () => {
+  it('dispatches selected golfer and calls onClose when a card is clicked', async () => {
     let closed = false
     const { store } = renderModal(true, () => { closed = true })
     const user = userEvent.setup()
     await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
     expect(closed).toBe(true)
-    expect(store.getState().player.selectedPlayer?.id).toBe('ace-omalley')
+    expect(store.getState().player.selectedGolfer?.id).toBe('ace-omalley')
   })
 })

@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import playerReducer, {
-  setSelectedPlayer,
-  selectSelectedPlayer,
+  setSelectedGolfer,
+  selectSelectedGolfer,
   selectAvailableGolfers,
 } from './playerSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from './apiSlice'
-import type { Golfer } from './playerSlice'
+import type { Golfer } from '../types/player'
 
 function makeStore() {
   return configureStore({
@@ -40,9 +40,9 @@ const sampleGolfer: Golfer = {
 }
 
 describe('playerSlice', () => {
-  it('has null selectedPlayer by default', () => {
+  it('has null selectedGolfer by default', () => {
     const store = makeStore()
-    expect(selectSelectedPlayer(store.getState() as TestState)).toBeNull()
+    expect(selectSelectedGolfer(store.getState() as TestState)).toBeNull()
   })
 
   it('has 6 available golfers loaded from players.json', () => {
@@ -71,23 +71,23 @@ describe('playerSlice', () => {
     expect(ids).toContain('flop-ferguson')
   })
 
-  it('sets the selected player via setSelectedPlayer action', () => {
+  it('sets the selected golfer via setSelectedGolfer action', () => {
     const store = makeStore()
-    store.dispatch(setSelectedPlayer(sampleGolfer))
-    expect(selectSelectedPlayer(store.getState() as TestState)).toEqual(sampleGolfer)
+    store.dispatch(setSelectedGolfer(sampleGolfer))
+    expect(selectSelectedGolfer(store.getState() as TestState)).toEqual(sampleGolfer)
   })
 
-  it('clears the selected player when null is dispatched', () => {
+  it('clears the selected golfer when null is dispatched', () => {
     const store = makeStore()
-    store.dispatch(setSelectedPlayer(sampleGolfer))
-    store.dispatch(setSelectedPlayer(null))
-    expect(selectSelectedPlayer(store.getState() as TestState)).toBeNull()
+    store.dispatch(setSelectedGolfer(sampleGolfer))
+    store.dispatch(setSelectedGolfer(null))
+    expect(selectSelectedGolfer(store.getState() as TestState)).toBeNull()
   })
 
   describe('reducer', () => {
     it('returns initial state for unknown action', () => {
       const state = playerReducer(undefined, { type: '@@init' })
-      expect(state.selectedPlayer).toBeNull()
+      expect(state.selectedGolfer).toBeNull()
       expect(state.availableGolfers.length).toBeGreaterThan(0)
     })
   })

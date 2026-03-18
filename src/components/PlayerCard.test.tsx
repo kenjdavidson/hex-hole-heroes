@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import type { Golfer } from '../store/playerSlice'
+import type { Golfer } from '../types/player'
 import PlayerCard from './PlayerCard'
 
 const mockGolfer: Golfer = {

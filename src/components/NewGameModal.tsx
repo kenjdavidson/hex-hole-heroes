@@ -8,10 +8,10 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectAvailableGolfers,
-  selectSelectedPlayer,
-  setSelectedPlayer,
+  selectSelectedGolfer,
+  setSelectedGolfer,
 } from '../store/playerSlice'
-import type { Golfer } from '../store/playerSlice'
+import type { Golfer } from '../types/player'
 import PlayerCard from './PlayerCard'
 
 interface NewGameModalProps {
@@ -22,10 +22,10 @@ interface NewGameModalProps {
 export default function NewGameModal({ open, onClose }: NewGameModalProps) {
   const dispatch = useDispatch()
   const availableGolfers = useSelector(selectAvailableGolfers)
-  const selectedPlayer = useSelector(selectSelectedPlayer)
+  const selectedGolfer = useSelector(selectSelectedGolfer)
 
   const handleSelectGolfer = (golfer: Golfer) => {
-    dispatch(setSelectedPlayer(golfer))
+    dispatch(setSelectedGolfer(golfer))
     onClose()
   }
 
@@ -66,7 +66,7 @@ export default function NewGameModal({ open, onClose }: NewGameModalProps) {
             <PlayerCard
               key={golfer.id}
               golfer={golfer}
-              selected={selectedPlayer?.id === golfer.id}
+              selected={selectedGolfer?.id === golfer.id}
               onClick={handleSelectGolfer}
             />
           ))}
