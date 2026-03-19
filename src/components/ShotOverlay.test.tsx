@@ -34,9 +34,21 @@ function renderWithStore(store = makeStore()) {
 }
 
 describe('ShotOverlay', () => {
-  it('renders nothing when no club is selected', () => {
+  it('renders the shot overlay region even when no club is selected', () => {
     renderWithStore()
-    expect(screen.queryByRole('region', { name: 'shot overlay' })).not.toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'shot overlay' })).toBeInTheDocument()
+  })
+
+  it('renders a placeholder when no club is selected', () => {
+    renderWithStore()
+    expect(screen.getByLabelText('club placeholder')).toBeInTheDocument()
+    expect(screen.getByText(/Select a club from your bag/)).toBeInTheDocument()
+  })
+
+  it('does not show Roll Dice or Change buttons when no club is selected', () => {
+    renderWithStore()
+    expect(screen.queryByRole('button', { name: 'roll dice' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'change club' })).not.toBeInTheDocument()
   })
 
   describe('with a club selected', () => {
@@ -59,14 +71,16 @@ describe('ShotOverlay', () => {
       store.dispatch(selectClub('dr'))
       renderWithStore(store)
       expect(screen.getByText(/Wood/)).toBeInTheDocument()
-      expect(screen.getByText(/12.+15 hex/)).toBeInTheDocument()
+      expect(screen.getByText('12–15')).toBeInTheDocument()
+      expect(screen.getAllByText('hex').length).toBeGreaterThan(0)
     })
 
     it('shows scatter info for clubs with scatter > 0', () => {
       const store = makeStore()
       store.dispatch(selectClub('dr'))
       renderWithStore(store)
-      expect(screen.getByText(/scatter 2/)).toBeInTheDocument()
+      expect(screen.getByText(/scatter:/)).toBeInTheDocument()
+      expect(screen.getByText('2')).toBeInTheDocument()
     })
 
     it('does not show scatter info for clubs with scatter === 0', () => {

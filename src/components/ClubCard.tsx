@@ -3,7 +3,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { Club, ClubType } from '../types/club'
 
-const TYPE_COLORS: Record<ClubType, { bg: string; text: string; border: string }> = {
+export const TYPE_COLORS: Record<ClubType, { bg: string; text: string; border: string }> = {
   Wood: { bg: '#4E342E', text: '#FFCC80', border: '#8D6E63' },
   Iron: { bg: '#37474F', text: '#B0BEC5', border: '#607D8B' },
   Wedge: { bg: '#E65100', text: '#FFF9C4', border: '#F57F17' },

@@ -14,9 +14,11 @@ export default function DeckPanel() {
   const selectedClubId = useSelector(selectSelectedClubId)
   const dispatch = useDispatch()
 
+  // The selected club is removed from the bag and shown on the table (ShotOverlay)
+  const bagClubs = clubs.filter((c) => c.id !== selectedClubId)
+
   const handleClubClick = (club: Club) => {
-    // Toggle selection: clicking an already-selected club deselects it
-    dispatch(selectClub(selectedClubId === club.id ? null : club.id))
+    dispatch(selectClub(club.id))
   }
 
   return (
@@ -25,20 +27,20 @@ export default function DeckPanel() {
         Your Bag
       </Typography>
       <Box sx={{ display: 'flex', position: 'relative', pt: 1.5 }}>
-        {clubs.map((club, idx) => (
+        {bagClubs.map((club, idx) => (
           <Box
             key={club.id}
             sx={{
               ml: idx === 0 ? 0 : `-${CARD_OVERLAP}px`,
               position: 'relative',
-              zIndex: selectedClubId === club.id ? 200 : idx + 1,
+              zIndex: idx + 1,
               '&:hover': { zIndex: 100 },
               '&:focus-within': { zIndex: 100 },
             }}
           >
             <ClubCard
               club={club}
-              selected={selectedClubId === club.id}
+              selected={false}
               onClick={handleClubClick}
             />
           </Box>

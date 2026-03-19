@@ -16,12 +16,6 @@ import NewGameModal from './NewGameModal'
 import DeckPanel from './DeckPanel'
 import ShotOverlay from './ShotOverlay'
 
-import { green } from '@mui/material/colors'
-
-const hexPatternSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="104" height="90"><g fill="none" stroke="${green[300]}" stroke-width="1.5"><polygon points="26,0 52,15 52,45 26,60 0,45 0,15"/><polygon points="78,0 104,15 104,45 78,60 52,45 52,15"/><line x1="26" y1="60" x2="26" y2="90"/><line x1="78" y1="60" x2="78" y2="90"/></g></svg>`,
-)
-
 export default function Layout() {
   const selectedGolfer = useSelector(selectSelectedGolfer)
 
@@ -118,28 +112,20 @@ export default function Layout() {
         sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}
       >
         {/* Left panel: Board */}
-        <Box
-          sx={{ flex: 2, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+        <Paper
+          elevation={0}
+          square
+          sx={{
+            flex: 2,
+            overflow: 'auto',
+            bgcolor: 'background.default',
+            borderRight: 1,
+            borderColor: 'divider',
+          }}
+          aria-label="board panel"
         >
-          <Paper
-            elevation={0}
-            square
-            sx={{
-              flex: 1,
-              overflow: 'auto',
-              backgroundImage: `url("data:image/svg+xml,${hexPatternSvg}")`,
-              backgroundRepeat: 'repeat',
-              backgroundSize: '104px 90px',
-              bgcolor: 'background.default',
-              borderRight: 1,
-              borderColor: 'divider',
-            }}
-            aria-label="board panel"
-          >
-            <Outlet />
-          </Paper>
-          <ShotOverlay />
-        </Box>
+          <Outlet />
+        </Paper>
 
         {/* Right panel: Scorecard */}
         <Paper
@@ -149,6 +135,7 @@ export default function Layout() {
           aria-label="scorecard panel"
         >
           <DeckPanel />
+          <ShotOverlay />
         </Paper>
       </Box>
 

@@ -56,31 +56,23 @@ describe('DeckPanel', () => {
     expect(screen.getByLabelText(/Putter, Putter/)).toBeInTheDocument()
   })
 
-  it('marks the Driver as selected when clicked', async () => {
+  it('removes the selected club from the bag when clicked', async () => {
     const user = userEvent.setup()
     renderWithStore(<DeckPanel />)
-    const driver = screen.getByLabelText(/Driver, Wood/)
-    await user.click(driver)
-    expect(driver).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByLabelText(/Driver, Wood/))
+    expect(screen.queryByLabelText(/Driver, Wood/)).not.toBeInTheDocument()
+    expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(13)
   })
 
-  it('deselects a club when it is clicked a second time', async () => {
+  it('selecting a different club returns the previous one to the bag', async () => {
     const user = userEvent.setup()
     renderWithStore(<DeckPanel />)
-    const driver = screen.getByLabelText(/Driver, Wood/)
-    await user.click(driver)
-    await user.click(driver)
-    expect(driver).toHaveAttribute('aria-pressed', 'false')
-  })
-
-  it('only one club is selected at a time', async () => {
-    const user = userEvent.setup()
-    renderWithStore(<DeckPanel />)
-    const driver = screen.getByLabelText(/Driver, Wood/)
-    const putter = screen.getByLabelText(/Putter, Putter/)
-    await user.click(driver)
-    await user.click(putter)
-    expect(driver).toHaveAttribute('aria-pressed', 'false')
-    expect(putter).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByLabelText(/Driver, Wood/))
+    // Driver is gone; now select the Putter
+    await user.click(screen.getByLabelText(/Putter, Putter/))
+    // Driver returns; Putter is gone
+    expect(screen.getByLabelText(/Driver, Wood/)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Putter, Putter/)).not.toBeInTheDocument()
+    expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(13)
   })
 })
