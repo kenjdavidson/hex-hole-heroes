@@ -10,8 +10,8 @@ export const TYPE_COLORS: Record<ClubType, { bg: string; text: string; border: s
   Putter: { bg: '#1A237E', text: '#C5CAE9', border: '#3949AB' },
 }
 
-const CARD_WIDTH = 44
-const CARD_HEIGHT = 88
+export const CARD_WIDTH = 44
+export const CARD_HEIGHT = 88
 
 /** Full card details rendered inside the hover Tooltip */
 function ClubDetail({ club }: { club: Club }) {
