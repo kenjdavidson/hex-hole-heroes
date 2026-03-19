@@ -66,7 +66,7 @@ describe('Layout', () => {
   it('renders the scorecard panel with the club bag', () => {
     renderLayout()
     expect(screen.getByLabelText('scorecard panel')).toBeInTheDocument()
-    expect(screen.getByText('Your Bag')).toBeInTheDocument()
+    expect(screen.getByLabelText('shot overlay')).toBeInTheDocument()
   })
 
   it('renders the status bar', () => {

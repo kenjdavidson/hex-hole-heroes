@@ -4,10 +4,10 @@ import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import CasinoIcon from '@mui/icons-material/Casino'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectSelectedClubId, selectLastShot, recordShot, clearShot, selectClub } from '../store/shotSlice'
+import { selectSelectedClubId, selectLastShot, recordShot, selectClub } from '../store/shotSlice'
 import { selectAllClubs } from '../store/deckSlice'
 import { roll2d6, rollD12, getShotResult, getScatterLabel, getPowerLabel } from '../services/DiceService'
-import ClubCard, { CARD_WIDTH, CARD_HEIGHT } from './ClubCard'
+import ClubCard, { CARD_HEIGHT } from './ClubCard'
 
 export default function ShotOverlay() {
   const dispatch = useDispatch()
@@ -25,10 +25,6 @@ export default function ShotOverlay() {
     dispatch(recordShot(result))
   }
 
-  const handleRollAgain = () => {
-    dispatch(clearShot())
-  }
-
   const handleReturnToBag = () => {
     dispatch(selectClub(null))
   }
@@ -39,37 +35,56 @@ export default function ShotOverlay() {
       aria-label="shot overlay"
       sx={{ px: 2, pb: 2, borderTop: 1, borderColor: 'divider' }}
     >
-      <Typography variant="subtitle2" sx={{ pt: 1.5, pb: 1, fontWeight: 700 }}>
-        On the Table
-      </Typography>
+      {/* Return to Bag at the top, only when a club is selected */}
+      {selectedClub && (
+        <Button
+          size="small"
+          variant="text"
+          onClick={handleReturnToBag}
+          aria-label="change club"
+          sx={{ pl: 0, mt: 1, mb: 0.5, alignSelf: 'flex-start' }}
+        >
+          ← Return to bag
+        </Button>
+      )}
 
-      {/* Two-column layout: dice area (left) + card at fixed dimensions (right) */}
-      <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-
-        {/* Left column: dice controls or placeholder */}
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          {!selectedClub ? (
-            <Box
-              aria-label="club placeholder"
-              sx={{
-                height: CARD_HEIGHT,
-                border: '2px dashed',
-                borderColor: 'divider',
-                borderRadius: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                p: 1,
-              }}
-            >
-              <Typography variant="caption" color="text.disabled" sx={{ textAlign: 'center' }}>
-                Select a club from your bag
-              </Typography>
+      {/* Dashed border container — holds the card and dice controls */}
+      <Box
+        sx={{
+          mt: selectedClub ? 0 : 1.5,
+          border: '2px dashed',
+          borderColor: 'divider',
+          borderRadius: 2,
+          p: 2,
+          minHeight: CARD_HEIGHT + 32,
+        }}
+      >
+        {!selectedClub ? (
+          <Box
+            aria-label="club placeholder"
+            sx={{
+              height: '100%',
+              minHeight: CARD_HEIGHT,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="caption" color="text.disabled" sx={{ textAlign: 'center' }}>
+              Select a club from your bag
+            </Typography>
+          </Box>
+        ) : (
+          /* Two-column layout: card (left) + dice controls (right) inside the border */
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+            {/* Card at canonical fixed dimensions */}
+            <Box sx={{ flexShrink: 0 }}>
+              <ClubCard club={selectedClub} selected />
             </Box>
-          ) : (
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+
+            {/* Dice controls */}
+            <Box sx={{ flex: 1, minWidth: 0 }}>
               {lastShot ? (
-                /* Dice result display */
                 <Box>
                   <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 0.5 }}>
                     <Box sx={{ textAlign: 'center' }}>
@@ -92,7 +107,7 @@ export default function ShotOverlay() {
                     )}
                   </Box>
 
-                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 0.75 }}>
+                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                     <Chip
                       size="small"
                       label={`${getPowerLabel(lastShot.powerOffset)} (${lastShot.powerOffset >= 0 ? '+' : ''}${lastShot.powerOffset} hex)`}
@@ -108,19 +123,8 @@ export default function ShotOverlay() {
                       />
                     )}
                   </Box>
-
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<CasinoIcon />}
-                    onClick={handleRollAgain}
-                    aria-label="roll again"
-                  >
-                    Roll Again
-                  </Button>
                 </Box>
               ) : (
-                /* Roll Dice button */
                 <Button
                   variant="contained"
                   fullWidth
@@ -131,37 +135,9 @@ export default function ShotOverlay() {
                   Roll Dice
                 </Button>
               )}
-
-              <Button
-                size="small"
-                variant="text"
-                onClick={handleReturnToBag}
-                aria-label="change club"
-                sx={{ pl: 0, alignSelf: 'flex-start' }}
-              >
-                ← Return to bag
-              </Button>
             </Box>
-          )}
-        </Box>
-
-        {/* Right column: card at canonical fixed dimensions, never resized */}
-        <Box sx={{ flexShrink: 0 }}>
-          {!selectedClub ? (
-            <Box
-              sx={{
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-                border: '2px dashed',
-                borderColor: 'divider',
-                borderRadius: 1.5,
-              }}
-            />
-          ) : (
-            <ClubCard club={selectedClub} selected />
-          )}
-        </Box>
-
+          </Box>
+        )}
       </Box>
     </Box>
   )

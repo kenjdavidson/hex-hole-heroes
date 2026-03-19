@@ -1,13 +1,12 @@
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAllClubs } from '../store/deckSlice'
 import { selectClub, selectSelectedClubId } from '../store/shotSlice'
 import type { Club } from '../types/club'
-import ClubCard from './ClubCard'
+import ClubCard, { MINI_CARD_WIDTH, MINI_CARD_HEIGHT } from './ClubCard'
 
-/** How many px each card slides under the previous one */
-const CARD_OVERLAP = 68
+/** Total arc spread in degrees for the hand layout */
+const ARC_DEGREES = 56
 
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
@@ -16,35 +15,60 @@ export default function DeckPanel() {
 
   // The selected club is removed from the bag and shown on the table (ShotOverlay)
   const bagClubs = clubs.filter((c) => c.id !== selectedClubId)
+  const n = bagClubs.length
 
   const handleClubClick = (club: Club) => {
     dispatch(selectClub(club.id))
   }
 
   return (
-    <Box sx={{ p: 2, pb: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Your Bag
-      </Typography>
-      <Box sx={{ display: 'flex', position: 'relative', pt: 1.5 }}>
-        {bagClubs.map((club, idx) => (
-          <Box
-            key={club.id}
-            sx={{
-              ml: idx === 0 ? 0 : `-${CARD_OVERLAP}px`,
-              position: 'relative',
-              zIndex: idx + 1,
-              '&:hover': { zIndex: 100 },
-              '&:focus-within': { zIndex: 100 },
-            }}
-          >
-            <ClubCard
-              club={club}
-              selected={false}
-              onClick={handleClubClick}
-            />
-          </Box>
-        ))}
+    <Box sx={{ px: 2, pt: 2, pb: 1 }}>
+      {/* Fan/arc hand layout — all cards share the same bottom-center pivot */}
+      <Box
+        sx={{
+          position: 'relative',
+          height: MINI_CARD_HEIGHT + 22,
+          overflow: 'visible',
+        }}
+      >
+        {bagClubs.map((club, idx) => {
+          // t is in [-1, 1]: division by (n-1) is safe because n > 1 in the true branch
+          const t = n > 1 ? (idx / (n - 1)) * 2 - 1 : 0
+          const angle = t * (ARC_DEGREES / 2)
+          const center = (n - 1) / 2
+          const zIndex = Math.max(1, n - Math.round(Math.abs(idx - center)))
+
+          return (
+            <Box
+              key={club.id}
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                left: '50%',
+                marginLeft: `-${MINI_CARD_WIDTH / 2}px`,
+                transformOrigin: '50% 100%',
+                transform: `rotate(${angle}deg)`,
+                zIndex,
+                transition: 'transform 0.15s ease',
+                '&:hover': {
+                  zIndex: n + 10,
+                  transform: `rotate(${angle}deg) translateY(-15px)`,
+                },
+                '&:focus-within': {
+                  zIndex: n + 10,
+                  transform: `rotate(${angle}deg) translateY(-15px)`,
+                },
+              }}
+            >
+              <ClubCard
+                club={club}
+                selected={false}
+                mini
+                onClick={handleClubClick}
+              />
+            </Box>
+          )
+        })}
       </Box>
     </Box>
   )
