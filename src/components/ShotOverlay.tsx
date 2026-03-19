@@ -33,9 +33,6 @@ export default function ShotOverlay() {
     dispatch(selectClub(null))
   }
 
-  const [distMin, distMax] = selectedClub?.dist ?? [0, 0]
-  const distLabel = distMin === distMax ? `${distMin}` : `${distMin}–${distMax}`
-
   return (
     <Box
       role="region"
@@ -46,10 +43,10 @@ export default function ShotOverlay() {
         On the Table
       </Typography>
 
-      {/* Two-column layout: dice area (left, fills remaining space) + card (right, fixed width) */}
+      {/* Two-column layout: dice area (left) + card at fixed dimensions (right) */}
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
 
-        {/* Left column: dice controls or placeholder text */}
+        {/* Left column: dice controls or placeholder */}
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {!selectedClub ? (
             <Box
@@ -71,40 +68,9 @@ export default function ShotOverlay() {
             </Box>
           ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-              {/* Club name + stats */}
-              <Box>
-                <Typography variant="subtitle2" sx={{ lineHeight: 1, mb: 0.25 }}>
-                  {selectedClub.name}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5, flexWrap: 'wrap' }}>
-                  <Typography component="span" variant="caption" color="text.secondary">
-                    {selectedClub.type}
-                  </Typography>
-                  <Typography component="span" variant="caption" color="text.secondary">·</Typography>
-                  <Typography component="span" variant="caption" color="text.secondary">
-                    {distLabel}
-                  </Typography>
-                  <Typography component="span" variant="caption" color="text.secondary">
-                    hex
-                  </Typography>
-                  {selectedClub.scatter > 0 && (
-                    <>
-                      <Typography component="span" variant="caption" color="text.secondary">·</Typography>
-                      <Typography component="span" variant="caption" color="text.secondary">
-                        scatter:
-                      </Typography>
-                      <Typography component="span" variant="caption" color="text.secondary">
-                        {selectedClub.scatter}
-                      </Typography>
-                    </>
-                  )}
-                </Box>
-              </Box>
-
-              {/* Dice result or Roll button */}
               {lastShot ? (
+                /* Dice result display */
                 <Box>
-                  {/* Rolled values */}
                   <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 0.5 }}>
                     <Box sx={{ textAlign: 'center' }}>
                       <Typography variant="caption" color="text.secondary" display="block">
@@ -126,7 +92,6 @@ export default function ShotOverlay() {
                     )}
                   </Box>
 
-                  {/* Result chips */}
                   <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mb: 0.75 }}>
                     <Chip
                       size="small"
@@ -155,6 +120,7 @@ export default function ShotOverlay() {
                   </Button>
                 </Box>
               ) : (
+                /* Roll Dice button */
                 <Button
                   variant="contained"
                   fullWidth
@@ -166,7 +132,6 @@ export default function ShotOverlay() {
                 </Button>
               )}
 
-              {/* Return to bag */}
               <Button
                 size="small"
                 variant="text"
@@ -180,7 +145,7 @@ export default function ShotOverlay() {
           )}
         </Box>
 
-        {/* Right column: card at its standard fixed dimensions, never resized */}
+        {/* Right column: card at canonical fixed dimensions, never resized */}
         <Box sx={{ flexShrink: 0 }}>
           {!selectedClub ? (
             <Box
@@ -189,7 +154,7 @@ export default function ShotOverlay() {
                 height: CARD_HEIGHT,
                 border: '2px dashed',
                 borderColor: 'divider',
-                borderRadius: 1,
+                borderRadius: 1.5,
               }}
             />
           ) : (
