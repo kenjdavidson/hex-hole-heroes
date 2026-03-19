@@ -71,40 +71,23 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
         },
       }}
     >
-      {/* Screen section: top portion reserved for card image */}
-      <Box
-        aria-hidden="true"
-        data-testid="card-screen"
-        sx={{
-          height: SCREEN_HEIGHT,
-          bgcolor: 'rgba(0,0,0,0.25)',
-          flexShrink: 0,
-          borderBottom: `1px solid ${accentColor}33`,
-        }}
-      />
-
-      {/* Header: ID + type badge */}
+      {/* Header: club name (left) + type badge (right) */}
       <Box
         sx={{
           px: 1.25,
-          pt: 0.5,
-          pb: 0.25,
+          pt: 0.75,
+          pb: 0.5,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'baseline',
+          flexShrink: 0,
         }}
       >
         <Typography
           component="span"
-          sx={{
-            fontWeight: 900,
-            fontSize: '0.88rem',
-            color: accentColor,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-          }}
+          sx={{ fontWeight: 600, fontSize: '0.6rem', color: accentColor }}
         >
-          {club.id}
+          {club.name}
         </Typography>
         <Typography
           component="span"
@@ -114,16 +97,39 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
         </Typography>
       </Box>
 
-      <Box sx={{ mx: 1.25, borderBottom: `1px solid ${accentColor}40` }} />
+      <Box sx={{ mx: 1.25, borderBottom: `1px solid ${accentColor}40`, flexShrink: 0 }} />
 
-      <Box sx={{ px: 1.25, pt: 0.5 }}>
+      {/* Screen section: image placeholder showing club abbreviation */}
+      <Box
+        aria-hidden="true"
+        data-testid="card-screen"
+        sx={{
+          height: SCREEN_HEIGHT,
+          bgcolor: 'rgba(0,0,0,0.25)',
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderBottom: `1px solid ${accentColor}33`,
+        }}
+      >
         <Typography
           component="span"
-          sx={{ display: 'block', fontWeight: 600, fontSize: '0.6rem', color: accentColor, mb: 0.25 }}
+          sx={{
+            fontWeight: 900,
+            fontSize: '1.4rem',
+            color: accentColor,
+            opacity: 0.4,
+            textTransform: 'uppercase',
+            letterSpacing: 2,
+          }}
         >
-          {club.name}
+          {club.id}
         </Typography>
+      </Box>
 
+      {/* Info section: distance, scatter, ability */}
+      <Box sx={{ px: 1.25, pt: 0.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
           <Typography
             component="span"
