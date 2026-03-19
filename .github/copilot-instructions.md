@@ -22,6 +22,11 @@ These instructions apply to all AI agents (GitHub Copilot, Claude, etc.) working
 - Tests must run with `npm test` and coverage with `npm run test:coverage`.
 - Do not commit the `dist/`, `coverage/`, or `node_modules/` directories.
 
+## Rules Documentation
+
+- The canonical rules for Hex Hole Heroes live in `docs/RULES.md`.
+- **Whenever you change any rules logic** (dice resolution, club distances, terrain effects, putting mechanics, scoring, or any other game rule), you **must** also update `docs/RULES.md` to keep it in sync with the implementation.
+
 ## Workflow
 
 - CI runs on every PR (`ci.yml`): all tests must pass before merging.

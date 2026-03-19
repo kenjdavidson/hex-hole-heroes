@@ -7,7 +7,7 @@ import type { Club } from '../types/club'
 import ClubCard from './ClubCard'
 
 /** How many px each card slides under the previous one */
-const CARD_OVERLAP = 108
+const CARD_OVERLAP = 68
 
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
