@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAllClubs } from '../store/deckSlice'
-import { selectSelectedGolfer } from '../store/playerSlice'
 import { selectClub, selectSelectedClubId } from '../store/shotSlice'
 import type { Club } from '../types/club'
 import ClubCard, { MINI_CARD_WIDTH, MINI_CARD_HEIGHT } from './ClubCard'
@@ -12,7 +11,6 @@ const ARC_DEGREES = 56
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
   const selectedClubId = useSelector(selectSelectedClubId)
-  const selectedGolfer = useSelector(selectSelectedGolfer)
   const dispatch = useDispatch()
 
   // The selected club is removed from the bag and shown on the table (ShotOverlay)

@@ -34,7 +34,7 @@ interface ClubCardProps {
   onClick?: (club: Club) => void
 }
 
-export default function ClubCard({ club, golfer, selected = false, onClick }: ClubCardProps) {
+export default function ClubCard({ club, golfer, selected = false, mini = false, onClick }: ClubCardProps) {
   const primaryColor = golfer?.ui.primaryColor ?? DEFAULT_PRIMARY
   const accentColor = golfer?.ui.accentColor ?? DEFAULT_ACCENT
 
@@ -81,8 +81,8 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
           sx={{
             width: MINI_CARD_WIDTH,
             height: MINI_CARD_HEIGHT,
-            bgcolor: colors.bg,
-            border: `1px solid ${selected ? colors.text : colors.border}`,
+            bgcolor: primaryColor,
+            border: `1px solid ${selected ? accentColor : `${accentColor}${BORDER_ALPHA}`}`,
             borderRadius: 1,
             overflow: 'hidden',
             display: 'flex',
@@ -93,7 +93,7 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
             cursor: onClick ? 'pointer' : 'default',
             userSelect: 'none',
             transition: 'box-shadow 0.15s ease',
-            boxShadow: selected ? `0 0 6px ${colors.text}88` : undefined,
+            boxShadow: selected ? `0 0 6px ${accentColor}88` : undefined,
           }}
         >
           <Typography
@@ -101,7 +101,7 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
             sx={{
               fontWeight: 900,
               fontSize: '0.7rem',
-              color: colors.text,
+              color: accentColor,
               textTransform: 'uppercase',
               letterSpacing: 0.5,
               lineHeight: 1,
@@ -113,7 +113,7 @@ export default function ClubCard({ club, golfer, selected = false, onClick }: Cl
             component="span"
             sx={{
               fontSize: '0.38rem',
-              color: colors.text,
+              color: accentColor,
               opacity: 0.7,
               textTransform: 'uppercase',
               mt: 0.25,
