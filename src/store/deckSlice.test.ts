@@ -7,6 +7,7 @@ import deckReducer, {
   selectDeckVersion,
   selectClubsByType,
 } from './deckSlice'
+import shotReducer from './shotSlice'
 
 function makeStore() {
   return configureStore({
@@ -14,6 +15,7 @@ function makeStore() {
       [apiSlice.reducerPath]: apiSlice.reducer,
       player: playerReducer,
       deck: deckReducer,
+      shot: shotReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),

@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
 import deckReducer from '../store/deckSlice'
+import shotReducer from '../store/shotSlice'
 import DeckPanel from './DeckPanel'
 
 function makeStore() {
@@ -13,6 +15,7 @@ function makeStore() {
       [apiSlice.reducerPath]: apiSlice.reducer,
       player: playerReducer,
       deck: deckReducer,
+      shot: shotReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),
@@ -51,5 +54,25 @@ describe('DeckPanel', () => {
   it('renders the Putter stub', () => {
     renderWithStore(<DeckPanel />)
     expect(screen.getByLabelText(/Putter, Putter/)).toBeInTheDocument()
+  })
+
+  it('removes the selected club from the bag when clicked', async () => {
+    const user = userEvent.setup()
+    renderWithStore(<DeckPanel />)
+    await user.click(screen.getByLabelText(/Driver, Wood/))
+    expect(screen.queryByLabelText(/Driver, Wood/)).not.toBeInTheDocument()
+    expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(13)
+  })
+
+  it('selecting a different club returns the previous one to the bag', async () => {
+    const user = userEvent.setup()
+    renderWithStore(<DeckPanel />)
+    await user.click(screen.getByLabelText(/Driver, Wood/))
+    // Driver is gone; now select the Putter
+    await user.click(screen.getByLabelText(/Putter, Putter/))
+    // Driver returns; Putter is gone
+    expect(screen.getByLabelText(/Driver, Wood/)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Putter, Putter/)).not.toBeInTheDocument()
+    expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(13)
   })
 })

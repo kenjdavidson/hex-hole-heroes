@@ -8,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
 import deckReducer from '../store/deckSlice'
+import shotReducer from '../store/shotSlice'
 import theme from '../theme'
 import Layout from './Layout'
 
@@ -17,6 +18,7 @@ function makeStore() {
       [apiSlice.reducerPath]: apiSlice.reducer,
       player: playerReducer,
       deck: deckReducer,
+      shot: shotReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),

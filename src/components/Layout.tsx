@@ -14,12 +14,7 @@ import { useSelector } from 'react-redux'
 import { selectSelectedGolfer } from '../store/playerSlice'
 import NewGameModal from './NewGameModal'
 import DeckPanel from './DeckPanel'
-
-import { green } from '@mui/material/colors'
-
-const hexPatternSvg = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="104" height="90"><g fill="none" stroke="${green[300]}" stroke-width="1.5"><polygon points="26,0 52,15 52,45 26,60 0,45 0,15"/><polygon points="78,0 104,15 104,45 78,60 52,45 52,15"/><line x1="26" y1="60" x2="26" y2="90"/><line x1="78" y1="60" x2="78" y2="90"/></g></svg>`,
-)
+import ShotOverlay from './ShotOverlay'
 
 export default function Layout() {
   const selectedGolfer = useSelector(selectSelectedGolfer)
@@ -123,9 +118,6 @@ export default function Layout() {
           sx={{
             flex: 2,
             overflow: 'auto',
-            backgroundImage: `url("data:image/svg+xml,${hexPatternSvg}")`,
-            backgroundRepeat: 'repeat',
-            backgroundSize: '104px 90px',
             bgcolor: 'background.default',
             borderRight: 1,
             borderColor: 'divider',
@@ -143,6 +135,7 @@ export default function Layout() {
           aria-label="scorecard panel"
         >
           <DeckPanel />
+          <ShotOverlay />
         </Paper>
       </Box>
 
