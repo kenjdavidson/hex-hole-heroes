@@ -6,6 +6,7 @@ import CasinoIcon from '@mui/icons-material/Casino'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectSelectedClubId, selectLastShot, recordShot, clearShot, selectClub } from '../store/shotSlice'
 import { selectAllClubs } from '../store/deckSlice'
+import { selectSelectedGolfer } from '../store/playerSlice'
 import { roll2d6, rollD12, getShotResult, getScatterLabel, getPowerLabel } from '../services/DiceService'
 import ClubCard, { CARD_WIDTH, CARD_HEIGHT } from './ClubCard'
 
@@ -14,6 +15,7 @@ export default function ShotOverlay() {
   const selectedClubId = useSelector(selectSelectedClubId)
   const lastShot = useSelector(selectLastShot)
   const clubs = useSelector(selectAllClubs)
+  const selectedGolfer = useSelector(selectSelectedGolfer)
 
   const selectedClub = clubs.find((c) => c.id === selectedClubId) ?? null
 
@@ -158,7 +160,7 @@ export default function ShotOverlay() {
               }}
             />
           ) : (
-            <ClubCard club={selectedClub} selected />
+            <ClubCard club={selectedClub} golfer={selectedGolfer} selected />
           )}
         </Box>
 
