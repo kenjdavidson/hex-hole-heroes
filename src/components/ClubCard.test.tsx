@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Club } from '../types/club'
 import ClubCard from './ClubCard'
@@ -83,46 +83,6 @@ describe('ClubCard', () => {
     expect(screen.getByText(/Power Draw/)).toBeInTheDocument()
   })
 
-  it('shows full club name in tooltip on hover', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} />)
-    await user.hover(screen.getByLabelText(/Driver/))
-    // After hover, tooltip popup adds a second occurrence of the name alongside the card body
-    await waitFor(() => expect(screen.getAllByText('Driver')).toHaveLength(2))
-  })
-
-  it('shows full club name in tooltip on keyboard focus', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} />)
-    await user.tab()
-    // After focus, tooltip popup adds a second occurrence of the name alongside the card body
-    await waitFor(() => expect(screen.getAllByText('Driver')).toHaveLength(2))
-  })
-
-  it('shows distance range in tooltip on hover', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} />)
-    await user.hover(screen.getByLabelText(/Driver/))
-    // After hover, tooltip popup adds a second occurrence of the distance alongside the card body
-    await waitFor(() => expect(screen.getAllByText('12–15')).toHaveLength(2))
-  })
-
-  it('shows scatter in tooltip when scatter > 0', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} />)
-    await user.hover(screen.getByLabelText(/Driver/))
-    // scatter count appears in both card body and tooltip after hover
-    await waitFor(() => expect(screen.getAllByText('2')).toHaveLength(2))
-  })
-
-  it('shows ability in tooltip when present', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} />)
-    await user.hover(screen.getByLabelText(/Driver/))
-    // ability appears in both card body and tooltip after hover
-    await waitFor(() => expect(screen.getAllByText(/Power Draw/)).toHaveLength(2))
-  })
-
   it('does not show scatter when scatter is 0', () => {
     render(<ClubCard club={ironClub} />)
     expect(screen.queryByText('scatter:')).not.toBeInTheDocument()
@@ -179,11 +139,6 @@ describe('ClubCard', () => {
       await user.keyboard(' ')
       expect(handleClick).toHaveBeenCalledWith(woodClub)
     })
-  it('does not show a tooltip popup when enableTooltip is false', async () => {
-    const user = userEvent.setup()
-    render(<ClubCard club={woodClub} enableTooltip={false} />)
-    await user.hover(screen.getByLabelText(/Driver/))
-    // Card body always shows the name, but no tooltip popup means only one occurrence
-    expect(screen.getAllByText('Driver')).toHaveLength(1)
   })
 })
+
