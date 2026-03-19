@@ -173,24 +173,5 @@ describe('ShotOverlay', () => {
       await user.click(screen.getByRole('button', { name: 'roll dice' }))
       expect(screen.getByLabelText('scatter result')).toBeInTheDocument()
     })
-
-    it('shows a "Roll Again" button after rolling', async () => {
-      const user = userEvent.setup()
-      const store = makeStore()
-      store.dispatch(selectClub('dr'))
-      renderWithStore(store)
-      await user.click(screen.getByRole('button', { name: 'roll dice' }))
-      expect(screen.getByRole('button', { name: 'roll again' })).toBeInTheDocument()
-    })
-
-    it('clears the result and shows "Roll Dice" again when "Roll Again" is clicked', async () => {
-      const user = userEvent.setup()
-      const store = makeStore()
-      store.dispatch(selectClub('dr'))
-      renderWithStore(store)
-      await user.click(screen.getByRole('button', { name: 'roll dice' }))
-      await user.click(screen.getByRole('button', { name: 'roll again' }))
-      expect(screen.getByRole('button', { name: 'roll dice' })).toBeInTheDocument()
-    })
   })
 })

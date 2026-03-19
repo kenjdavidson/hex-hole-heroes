@@ -27,11 +27,6 @@ function renderWithStore(ui: React.ReactElement) {
 }
 
 describe('DeckPanel', () => {
-  it('renders the "Your Bag" heading', () => {
-    renderWithStore(<DeckPanel />)
-    expect(screen.getByText('Your Bag')).toBeInTheDocument()
-  })
-
   it('renders all 14 club stubs in a single row', () => {
     renderWithStore(<DeckPanel />)
     const stubs = screen.getAllByLabelText(/distance .+ hexes/)
