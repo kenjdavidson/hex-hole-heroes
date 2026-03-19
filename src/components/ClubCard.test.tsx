@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Club } from '../types/club'
+import type { Golfer } from '../types/player'
 import ClubCard from './ClubCard'
 
 const woodClub: Club = {
@@ -29,6 +30,22 @@ const noAbilityClub: Club = {
   dist: [8, 8],
   scatter: 1,
   ability: null,
+}
+
+const mockGolfer: Golfer = {
+  id: 'ace-omalley',
+  name: "'Ace' O'Malley",
+  initials: 'ACE',
+  archetype: 'The Veteran',
+  bio: 'Test bio',
+  ui: {
+    primaryColor: '#2D5A27',
+    accentColor: '#F0EAD6',
+    icon: 'ace_omalley.png',
+    hexTheme: 'forest-green',
+  },
+  stats: { power: 2, accuracy: 5, recovery: 4 },
+  specialAbilities: [],
 }
 
 describe('ClubCard', () => {
@@ -91,6 +108,22 @@ describe('ClubCard', () => {
   it('does not show ability star when ability is null', () => {
     render(<ClubCard club={noAbilityClub} />)
     expect(screen.queryByText(/★/)).not.toBeInTheDocument()
+  })
+
+  it('renders the screen section at the top of the card', () => {
+    render(<ClubCard club={woodClub} />)
+    expect(screen.getByTestId('card-screen')).toBeInTheDocument()
+  })
+
+  it('renders without errors when a golfer prop is provided', () => {
+    render(<ClubCard club={woodClub} golfer={mockGolfer} />)
+    expect(screen.getByText('dr')).toBeInTheDocument()
+    expect(screen.getByTestId('card-screen')).toBeInTheDocument()
+  })
+
+  it('renders without errors when golfer prop is null', () => {
+    render(<ClubCard club={woodClub} golfer={null} />)
+    expect(screen.getByText('dr')).toBeInTheDocument()
   })
 
   describe('selection', () => {
