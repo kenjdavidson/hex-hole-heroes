@@ -119,12 +119,23 @@ function ClubDetail({ club }: { club: Club }) {
 
 interface ClubCardProps {
   club: Club
+  selected?: boolean
+  onClick?: (club: Club) => void
 }
 
-export default function ClubCard({ club }: ClubCardProps) {
+export default function ClubCard({ club, selected = false, onClick }: ClubCardProps) {
   const colors = TYPE_COLORS[club.type]
   const [distMin, distMax] = club.dist
   const distLabel = distMin === distMax ? `${distMin}` : `${distMin}–${distMax}`
+
+  const handleClick = () => onClick?.(club)
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
 
   return (
     <Tooltip
@@ -137,21 +148,27 @@ export default function ClubCard({ club }: ClubCardProps) {
       }}
     >
       <Box
+        role={onClick ? 'button' : undefined}
         tabIndex={0}
         aria-label={`${club.name}, ${club.type}, distance ${distLabel} hexes`}
+        aria-pressed={onClick ? selected : undefined}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
         sx={{
           width: CARD_WIDTH,
           height: CARD_HEIGHT,
           bgcolor: colors.bg,
-          border: `2px solid ${colors.border}`,
+          border: `2px solid ${selected ? colors.text : colors.border}`,
           borderRadius: 1,
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'center',
           pt: 1,
-          cursor: 'default',
+          cursor: onClick ? 'pointer' : 'default',
           userSelect: 'none',
-          transition: 'transform 0.15s ease',
+          transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+          transform: selected ? 'translateY(-10px)' : undefined,
+          boxShadow: selected ? `0 0 8px ${colors.text}88` : undefined,
           '&:hover, &:focus-visible': {
             transform: 'translateY(-10px)',
             outline: 'none',

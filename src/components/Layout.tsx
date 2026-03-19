@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux'
 import { selectSelectedGolfer } from '../store/playerSlice'
 import NewGameModal from './NewGameModal'
 import DeckPanel from './DeckPanel'
+import ShotOverlay from './ShotOverlay'
 
 import { green } from '@mui/material/colors'
 
@@ -117,23 +118,28 @@ export default function Layout() {
         sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}
       >
         {/* Left panel: Board */}
-        <Paper
-          elevation={0}
-          square
-          sx={{
-            flex: 2,
-            overflow: 'auto',
-            backgroundImage: `url("data:image/svg+xml,${hexPatternSvg}")`,
-            backgroundRepeat: 'repeat',
-            backgroundSize: '104px 90px',
-            bgcolor: 'background.default',
-            borderRight: 1,
-            borderColor: 'divider',
-          }}
-          aria-label="board panel"
+        <Box
+          sx={{ flex: 2, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
         >
-          <Outlet />
-        </Paper>
+          <Paper
+            elevation={0}
+            square
+            sx={{
+              flex: 1,
+              overflow: 'auto',
+              backgroundImage: `url("data:image/svg+xml,${hexPatternSvg}")`,
+              backgroundRepeat: 'repeat',
+              backgroundSize: '104px 90px',
+              bgcolor: 'background.default',
+              borderRight: 1,
+              borderColor: 'divider',
+            }}
+            aria-label="board panel"
+          >
+            <Outlet />
+          </Paper>
+          <ShotOverlay />
+        </Box>
 
         {/* Right panel: Scorecard */}
         <Paper

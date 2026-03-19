@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Club } from '../types/club'
@@ -106,5 +106,53 @@ describe('ClubCard', () => {
     await user.hover(screen.getByLabelText(/4-Iron/))
     await screen.findByText('4-Iron') // wait for tooltip
     expect(screen.queryByText(/★/)).not.toBeInTheDocument()
+  })
+
+  describe('selection', () => {
+    it('does not have role="button" when no onClick is provided', () => {
+      render(<ClubCard club={woodClub} />)
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+    })
+
+    it('has role="button" when onClick is provided', () => {
+      render(<ClubCard club={woodClub} onClick={() => {}} />)
+      expect(screen.getByRole('button', { name: /Driver/ })).toBeInTheDocument()
+    })
+
+    it('has aria-pressed="false" when selected is false and onClick provided', () => {
+      render(<ClubCard club={woodClub} onClick={() => {}} selected={false} />)
+      expect(screen.getByRole('button', { name: /Driver/ })).toHaveAttribute('aria-pressed', 'false')
+    })
+
+    it('has aria-pressed="true" when selected is true', () => {
+      render(<ClubCard club={woodClub} onClick={() => {}} selected={true} />)
+      expect(screen.getByRole('button', { name: /Driver/ })).toHaveAttribute('aria-pressed', 'true')
+    })
+
+    it('calls onClick with the club when clicked', async () => {
+      const user = userEvent.setup()
+      const handleClick = vi.fn()
+      render(<ClubCard club={woodClub} onClick={handleClick} />)
+      await user.click(screen.getByRole('button', { name: /Driver/ }))
+      expect(handleClick).toHaveBeenCalledWith(woodClub)
+    })
+
+    it('calls onClick when Enter key is pressed', async () => {
+      const user = userEvent.setup()
+      const handleClick = vi.fn()
+      render(<ClubCard club={woodClub} onClick={handleClick} />)
+      screen.getByRole('button', { name: /Driver/ }).focus()
+      await user.keyboard('{Enter}')
+      expect(handleClick).toHaveBeenCalledWith(woodClub)
+    })
+
+    it('calls onClick when Space key is pressed', async () => {
+      const user = userEvent.setup()
+      const handleClick = vi.fn()
+      render(<ClubCard club={woodClub} onClick={handleClick} />)
+      screen.getByRole('button', { name: /Driver/ }).focus()
+      await user.keyboard(' ')
+      expect(handleClick).toHaveBeenCalledWith(woodClub)
+    })
   })
 })
