@@ -7,11 +7,14 @@ import { selectClub, selectSelectedClubId } from '../store/shotSlice'
 import type { Club } from '../types/club'
 import ClubCard, { CARD_WIDTH, CARD_HEIGHT } from './ClubCard'
 
-/** Scale factor applied to the full card for the bag hand */
-const SCALE = 0.4
+/** Scale factor applied to the full card for the bag hand (20% larger than original 0.4) */
+const SCALE = 0.48
 /** Visual dimensions of a scaled card */
-const SCALED_CARD_WIDTH = Math.round(CARD_WIDTH * SCALE)   // 51 px
-const SCALED_CARD_HEIGHT = Math.round(CARD_HEIGHT * SCALE)  // 72 px
+const SCALED_CARD_WIDTH = Math.round(CARD_WIDTH * SCALE)   // ~61 px
+const SCALED_CARD_HEIGHT = Math.round(CARD_HEIGHT * SCALE)  // ~86 px
+
+/** Maximum step between cards to keep the hand nicely overlapped */
+const MAX_CARD_STEP = Math.round(SCALED_CARD_WIDTH * 0.55) // ~34 px
 
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
@@ -38,10 +41,11 @@ export default function DeckPanel() {
     return () => ro.disconnect()
   }, [])
 
-  // Spread cards evenly; fall back to a compact default before first measure
-  const cardStep = n > 1 && containerWidth > SCALED_CARD_WIDTH
+  // Spread cards with overlap; cap step so cards stay nicely overlapped
+  const spreadStep = n > 1 && containerWidth > SCALED_CARD_WIDTH
     ? (containerWidth - SCALED_CARD_WIDTH) / (n - 1)
     : 24
+  const cardStep = Math.min(spreadStep, MAX_CARD_STEP)
 
   const handleClubClick = (club: Club) => {
     dispatch(selectClub(club.id))
