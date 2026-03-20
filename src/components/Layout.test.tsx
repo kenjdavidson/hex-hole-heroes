@@ -96,6 +96,16 @@ describe('Layout', () => {
     expect(screen.getByLabelText('shot overlay')).toBeInTheDocument()
   })
 
+  it('hides the scorecard panel on the /new-game route', () => {
+    renderLayoutWithRoutes('/new-game')
+    expect(screen.queryByLabelText('scorecard panel')).not.toBeInTheDocument()
+  })
+
+  it('shows the scorecard panel on the home route', () => {
+    renderLayoutWithRoutes('/')
+    expect(screen.getByLabelText('scorecard panel')).toBeInTheDocument()
+  })
+
   it('renders the status bar', () => {
     renderLayout()
     expect(screen.getByLabelText('status bar')).toBeInTheDocument()

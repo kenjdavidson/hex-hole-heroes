@@ -5,6 +5,7 @@ import type { Golfer } from '../types/player'
 interface PlayerCardProps {
   golfer: Golfer
   selected?: boolean
+  compact?: boolean
   onClick?: (golfer: Golfer) => void
 }
 
@@ -14,11 +15,15 @@ const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const SQRT3_OVER_2 = Math.sqrt(3) / 2
 const CARD_WIDTH = 200
 const CARD_HEIGHT = Math.round(CARD_WIDTH * SQRT3_OVER_2) // 173
+const COMPACT_CARD_WIDTH = 140
+const COMPACT_CARD_HEIGHT = Math.round(COMPACT_CARD_WIDTH * SQRT3_OVER_2) // 121
 const BORDER_WIDTH = 7
+const COMPACT_BORDER_WIDTH = 5
 
 export default function PlayerCard({
   golfer,
   selected = false,
+  compact = false,
   onClick,
 }: PlayerCardProps) {
   const handleClick = () => {
@@ -33,6 +38,10 @@ export default function PlayerCard({
     }
   }
 
+  const width = compact ? COMPACT_CARD_WIDTH : CARD_WIDTH
+  const height = compact ? COMPACT_CARD_HEIGHT : CARD_HEIGHT
+  const border = compact ? COMPACT_BORDER_WIDTH : BORDER_WIDTH
+
   return (
     <Box
       role="button"
@@ -43,8 +52,8 @@ export default function PlayerCard({
       aria-pressed={selected}
       sx={{
         position: 'relative',
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
+        width,
+        height,
         cursor: 'pointer',
         userSelect: 'none',
         transition: 'transform 0.15s ease',
@@ -74,10 +83,10 @@ export default function PlayerCard({
       <Box
         sx={{
           position: 'absolute',
-          top: BORDER_WIDTH,
-          left: BORDER_WIDTH,
-          right: BORDER_WIDTH,
-          bottom: BORDER_WIDTH,
+          top: border,
+          left: border,
+          right: border,
+          bottom: border,
           bgcolor: golfer.ui.accentColor,
           clipPath: HEX_CLIP,
           display: 'flex',
@@ -98,7 +107,7 @@ export default function PlayerCard({
             right: 0,
             textAlign: 'center',
             fontWeight: 'bold',
-            fontSize: '0.62rem',
+            fontSize: compact ? '0.5rem' : '0.62rem',
             lineHeight: 1.2,
             color: golfer.ui.primaryColor,
             px: 3,
@@ -112,7 +121,7 @@ export default function PlayerCard({
           component="span"
           sx={{
             fontWeight: 900,
-            fontSize: '2.4rem',
+            fontSize: compact ? '1.7rem' : '2.4rem',
             lineHeight: 1,
             color: golfer.ui.primaryColor,
             letterSpacing: 2,
@@ -131,7 +140,7 @@ export default function PlayerCard({
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '0.6rem',
+            fontSize: compact ? '0.48rem' : '0.6rem',
             color: golfer.ui.primaryColor,
             opacity: 0.85,
             px: 3,
