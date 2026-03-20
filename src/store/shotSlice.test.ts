@@ -10,7 +10,7 @@ import shotReducer, {
   selectSelectedClubId,
   selectLastShot,
 } from './shotSlice'
-import gameReducer from './gameSlice'
+import gameReducer from './game'
 import type { ShotResult } from '../types/shot'
 
 function makeStore() {

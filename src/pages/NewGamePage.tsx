@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectAvailableGolfers, setSelectedGolfer } from '../store/playerSlice'
 import { selectAllClubs } from '../store/deckSlice'
-import { startGame } from '../store/gameSlice'
+import { startGame } from '../store/game'
 import type { Golfer } from '../types/player'
 import PlayerCard from '../components/PlayerCard'
 

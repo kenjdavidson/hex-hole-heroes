@@ -1,18 +1,18 @@
 import { beforeEach, describe, it, expect } from 'vitest'
 import { configureStore } from '@reduxjs/toolkit'
-import { apiSlice } from './apiSlice'
-import playerReducer from './playerSlice'
-import deckReducer from './deckSlice'
-import shotReducer from './shotSlice'
+import { apiSlice } from '../apiSlice'
+import playerReducer from '../playerSlice'
+import deckReducer from '../deckSlice'
+import shotReducer from '../shotSlice'
 import gameReducer, {
   startGame,
   clearGame,
   selectActiveGame,
   selectHasActiveGame,
-} from './gameSlice'
-import { gameListenerMiddleware } from './index'
-import type { Golfer } from '../types/player'
-import type { Club } from '../types/club'
+} from './slice'
+import { gameListenerMiddleware } from './listeners'
+import type { Golfer } from '../../types/player'
+import type { Club } from '../../types/club'
 
 function makeStore() {
   return configureStore({

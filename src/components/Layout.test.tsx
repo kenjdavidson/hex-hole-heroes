@@ -9,7 +9,7 @@ import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
 import deckReducer from '../store/deckSlice'
 import shotReducer from '../store/shotSlice'
-import gameReducer from '../store/gameSlice'
+import gameReducer from '../store/game'
 import theme from '../theme'
 import Layout from './Layout'
 

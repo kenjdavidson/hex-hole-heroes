@@ -8,7 +8,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from './apiSlice'
 import deckReducer from './deckSlice'
 import shotReducer from './shotSlice'
-import gameReducer from './gameSlice'
+import gameReducer from './game'
 import type { Golfer } from '../types/player'
 
 function makeStore() {

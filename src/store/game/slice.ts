@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './index'
-import type { Game } from '../types/game'
-import type { Golfer } from '../types/player'
-import type { Club } from '../types/club'
+import type { RootState } from '../index'
+import type { Game } from '../../types/game'
+import type { Golfer } from '../../types/player'
+import type { Club } from '../../types/club'
 
-export type { Game } from '../types/game'
+export type { Game } from '../../types/game'
 
-interface StartGamePayload {
+export const GAME_STORAGE_KEY = 'hex-hole-heroes:activeGame'
+
+export interface StartGamePayload {
   golfer: Golfer
   clubs: Club[]
   holes: number
@@ -18,7 +20,7 @@ interface GameState {
 
 function loadGameFromStorage(): Game | null {
   try {
-    const serialized = localStorage.getItem('hex-hole-heroes:activeGame')
+    const serialized = localStorage.getItem(GAME_STORAGE_KEY)
     if (!serialized) return null
     return JSON.parse(serialized) as Game
   } catch {

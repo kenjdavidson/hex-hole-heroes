@@ -4,7 +4,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
 import NewGamePage from './pages/NewGamePage'
-import { selectHasActiveGame } from './store/gameSlice'
+import { selectHasActiveGame } from './store/game'
 
 function HomeGuard() {
   const hasGame = useSelector(selectHasActiveGame)

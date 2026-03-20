@@ -8,7 +8,7 @@ import deckReducer, {
   selectClubsByType,
 } from './deckSlice'
 import shotReducer from './shotSlice'
-import gameReducer from './gameSlice'
+import gameReducer from './game'
 
 function makeStore() {
   return configureStore({
