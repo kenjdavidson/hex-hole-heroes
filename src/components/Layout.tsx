@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectSelectedGolfer } from '../store/playerSlice'
 import DeckPanel from './DeckPanel'
@@ -18,6 +18,9 @@ import ShotOverlay from './ShotOverlay'
 export default function Layout() {
   const selectedGolfer = useSelector(selectSelectedGolfer)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const isNewGame = location.pathname === '/new-game'
 
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
 
@@ -108,27 +111,28 @@ export default function Layout() {
           elevation={0}
           square
           sx={{
-            flex: 2,
+            flex: isNewGame ? 1 : 2,
             overflow: 'auto',
             bgcolor: 'background.default',
-            borderRight: 1,
-            borderColor: 'divider',
+            ...(!isNewGame && { borderRight: 1, borderColor: 'divider' }),
           }}
           aria-label="board panel"
         >
           <Outlet />
         </Paper>
 
-        {/* Right panel: Scorecard */}
-        <Paper
-          elevation={0}
-          square
-          sx={{ flex: 1, overflow: 'auto', bgcolor: 'background.paper' }}
-          aria-label="scorecard panel"
-        >
-          <DeckPanel />
-          <ShotOverlay />
-        </Paper>
+        {/* Right panel: Scorecard — hidden during game creation */}
+        {!isNewGame && (
+          <Paper
+            elevation={0}
+            square
+            sx={{ flex: 1, overflow: 'auto', bgcolor: 'background.paper' }}
+            aria-label="scorecard panel"
+          >
+            <DeckPanel />
+            <ShotOverlay />
+          </Paper>
+        )}
       </Box>
 
       {/* Status bar */}
