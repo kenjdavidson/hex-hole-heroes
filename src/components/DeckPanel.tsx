@@ -13,8 +13,21 @@ const SCALE = 0.48
 const SCALED_CARD_WIDTH = Math.round(CARD_WIDTH * SCALE)   // ~61 px
 const SCALED_CARD_HEIGHT = Math.round(CARD_HEIGHT * SCALE)  // ~86 px
 
-/** Maximum step between cards to keep the hand nicely overlapped */
+/** Maximum step between cards within a row to keep them nicely overlapped */
 const MAX_CARD_STEP = Math.round(SCALED_CARD_WIDTH * 0.55) // ~34 px
+/** Fallback step when container width is not yet measured */
+const DEFAULT_CARD_STEP = 24
+/** Maximum cards shown in a single row before wrapping to a new row */
+const CARDS_PER_ROW = 7
+/** Vertical distance between rows — rows overlap so only the top portion of each row is exposed */
+const ROW_STEP_Y = Math.round(SCALED_CARD_HEIGHT * 0.55)   // ~47 px
+/** Extra bottom padding below the last row */
+const CONTAINER_BOTTOM_PAD = 12
+/**
+ * Z-index multiplier per row — must be > CARDS_PER_ROW so each row's fan z-values
+ * (1…CARDS_PER_ROW) don't bleed into the next row's range.
+ */
+const Z_ROW_STRIDE = CARDS_PER_ROW * 2
 
 export default function DeckPanel() {
   const clubs = useSelector(selectAllClubs)
@@ -41,11 +54,9 @@ export default function DeckPanel() {
     return () => ro.disconnect()
   }, [])
 
-  // Spread cards with overlap; cap step so cards stay nicely overlapped
-  const spreadStep = n > 1 && containerWidth > SCALED_CARD_WIDTH
-    ? (containerWidth - SCALED_CARD_WIDTH) / (n - 1)
-    : 24
-  const cardStep = Math.min(spreadStep, MAX_CARD_STEP)
+  // Multi-row layout: at most CARDS_PER_ROW per row, rows overlap vertically
+  const numRows = Math.ceil(n / CARDS_PER_ROW)
+  const containerHeight = SCALED_CARD_HEIGHT + (numRows - 1) * ROW_STEP_Y + CONTAINER_BOTTOM_PAD
 
   const handleClubClick = (club: Club) => {
     dispatch(selectClub(club.id))
@@ -53,37 +64,50 @@ export default function DeckPanel() {
 
   return (
     <Box sx={{ px: 2, pt: 2, pb: 1 }}>
-      {/* Horizontal hand — cards spread across the full container width */}
+      {/* Bag hand — cards split into rows of CARDS_PER_ROW, rows overlap vertically */}
       <Box
         ref={containerRef}
         sx={{
           position: 'relative',
           width: '100%',
-          height: SCALED_CARD_HEIGHT + 12,
+          height: containerHeight,
         }}
       >
         {bagClubs.map((club, idx) => {
-          const center = (n - 1) / 2
-          const zIndex = Math.max(1, n - Math.round(Math.abs(idx - center)))
+          const rowIdx = Math.floor(idx / CARDS_PER_ROW)
+          const posInRow = idx % CARDS_PER_ROW
+          const cardsInRow = Math.min(CARDS_PER_ROW, n - rowIdx * CARDS_PER_ROW)
+
+          // Horizontal step for this row: spread to fill width, capped at MAX_CARD_STEP
+          const rowSpread =
+            cardsInRow > 1 && containerWidth > SCALED_CARD_WIDTH
+              ? (containerWidth - SCALED_CARD_WIDTH) / (cardsInRow - 1)
+              : DEFAULT_CARD_STEP
+          const rowStep = Math.min(rowSpread, MAX_CARD_STEP)
+
+          // Center cards in the row have higher z-index (fan effect); later rows are in front
+          const rowCenter = (cardsInRow - 1) / 2
+          const fanZ = Math.max(1, cardsInRow - Math.round(Math.abs(posInRow - rowCenter)))
+          const zIndex = rowIdx * Z_ROW_STRIDE + fanZ
 
           return (
             <Box
               key={club.id}
               sx={{
                 position: 'absolute',
-                top: 0,
-                left: idx * cardStep,
+                top: rowIdx * ROW_STEP_Y,
+                left: posInRow * rowStep,
                 width: SCALED_CARD_WIDTH,
                 height: SCALED_CARD_HEIGHT,
                 overflow: 'hidden',
                 zIndex,
                 transition: 'transform 0.15s ease',
                 '&:hover': {
-                  zIndex: n + 10,
+                  zIndex: numRows * Z_ROW_STRIDE + 10,
                   transform: 'translateY(-8px)',
                 },
                 '&:focus-within': {
-                  zIndex: n + 10,
+                  zIndex: numRows * Z_ROW_STRIDE + 10,
                   transform: 'translateY(-8px)',
                 },
               }}
