@@ -1,9 +1,41 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit'
 import { apiSlice } from './apiSlice'
 import playerReducer from './playerSlice'
 import deckReducer from './deckSlice'
 import shotReducer from './shotSlice'
-import gameReducer from './gameSlice'
+import gameReducer, { startGame, clearGame } from './gameSlice'
+import type { Game } from '../types/game'
+
+const GAME_STORAGE_KEY = 'hex-hole-heroes:activeGame'
+
+type GameStateSlice = { game: { activeGame: Game | null } }
+
+export const gameListenerMiddleware = createListenerMiddleware()
+
+gameListenerMiddleware.startListening({
+  actionCreator: startGame,
+  effect: (_action, listenerApi) => {
+    try {
+      const { activeGame } = (listenerApi.getState() as GameStateSlice).game
+      if (activeGame) {
+        localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(activeGame))
+      }
+    } catch {
+      // ignore write errors (e.g. private browsing quota)
+    }
+  },
+})
+
+gameListenerMiddleware.startListening({
+  actionCreator: clearGame,
+  effect: () => {
+    try {
+      localStorage.removeItem(GAME_STORAGE_KEY)
+    } catch {
+      // ignore errors
+    }
+  },
+})
 
 export const store = configureStore({
   reducer: {
@@ -14,24 +46,9 @@ export const store = configureStore({
     game: gameReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
-})
-
-let lastActiveGame: string | null = null
-store.subscribe(() => {
-  try {
-    const { activeGame } = store.getState().game
-    const serialized = activeGame ? JSON.stringify(activeGame) : null
-    if (serialized === lastActiveGame) return
-    lastActiveGame = serialized
-    if (serialized) {
-      localStorage.setItem('hex-hole-heroes:activeGame', serialized)
-    } else {
-      localStorage.removeItem('hex-hole-heroes:activeGame')
-    }
-  } catch {
-    // ignore write errors (e.g. private browsing quota)
-  }
+    getDefaultMiddleware()
+      .prepend(gameListenerMiddleware.middleware)
+      .concat(apiSlice.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

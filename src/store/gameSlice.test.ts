@@ -10,6 +10,7 @@ import gameReducer, {
   selectActiveGame,
   selectHasActiveGame,
 } from './gameSlice'
+import { gameListenerMiddleware } from './index'
 import type { Golfer } from '../types/player'
 import type { Club } from '../types/club'
 
@@ -23,7 +24,9 @@ function makeStore() {
       game: gameReducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(apiSlice.middleware),
+      getDefaultMiddleware()
+        .prepend(gameListenerMiddleware.middleware)
+        .concat(apiSlice.middleware),
   })
 }
 
@@ -158,6 +161,29 @@ describe('gameSlice', () => {
     it('returns initial state for unknown action', () => {
       const state = gameReducer(undefined, { type: '@@init' })
       expect(state.activeGame).toBeNull()
+    })
+  })
+
+  describe('localStorage persistence via listener middleware', () => {
+    it('persists activeGame to localStorage on startGame', () => {
+      const store = makeStore()
+      store.dispatch(
+        startGame({ golfer: sampleGolfer, clubs: [sampleClub], holes: 9 }),
+      )
+      const stored = localStorage.getItem('hex-hole-heroes:activeGame')
+      expect(stored).not.toBeNull()
+      const parsed = JSON.parse(stored!)
+      expect(parsed.golfer.id).toBe(sampleGolfer.id)
+      expect(parsed.holes).toBe(9)
+    })
+
+    it('removes activeGame from localStorage on clearGame', () => {
+      const store = makeStore()
+      store.dispatch(
+        startGame({ golfer: sampleGolfer, clubs: [sampleClub], holes: 9 }),
+      )
+      store.dispatch(clearGame())
+      expect(localStorage.getItem('hex-hole-heroes:activeGame')).toBeNull()
     })
   })
 })
