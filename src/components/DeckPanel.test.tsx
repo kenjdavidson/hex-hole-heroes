@@ -27,7 +27,7 @@ function renderWithStore(ui: React.ReactElement) {
 }
 
 describe('DeckPanel', () => {
-  it('renders all 14 club stubs in a single row', () => {
+  it('renders all 14 club cards in the bag hand', () => {
     renderWithStore(<DeckPanel />)
     const stubs = screen.getAllByLabelText(/distance .+ hexes/)
     expect(stubs).toHaveLength(14)
