@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hex Hole Heroes</title>
+    <script>
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // This script redirects 404s back to index.html with the original path
+      // encoded as a query parameter so React Router can handle the navigation.
+      //
+      // pathSegmentsToKeep = 1 preserves the /hex-hole-heroes/ base segment.
+      const pathSegmentsToKeep = 1;
+      const l = window.location;
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          l.pathname
+            .split('/')
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join('/') +
+          '/?/' +
+          l.pathname
+            .slice(1)
+            .split('/')
+            .slice(pathSegmentsToKeep)
+            .join('/')
+            .replace(/&/g, '~and~') +
+          (l.search
+            ? '&' + l.search.slice(1).replace(/&/g, '~and~')
+            : '') +
+          l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
