@@ -79,7 +79,7 @@ describe('NewGamePage', () => {
   it('Start Game button is disabled when no golfer is selected', () => {
     renderPage()
     expect(
-      screen.getByRole('button', { name: /start game/i }),
+      screen.getByRole('button', { name: /create game/i }),
     ).toBeDisabled()
   })
 
@@ -88,7 +88,7 @@ describe('NewGamePage', () => {
     const user = userEvent.setup()
     await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
     expect(
-      screen.getByRole('button', { name: /start game/i }),
+      screen.getByRole('button', { name: /create game/i }),
     ).not.toBeDisabled()
   })
 
@@ -105,7 +105,7 @@ describe('NewGamePage', () => {
     const { store } = renderPage()
     const user = userEvent.setup()
     await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
-    await user.click(screen.getByRole('button', { name: /start game/i }))
+    await user.click(screen.getByRole('button', { name: /create game/i }))
     const game = store.getState().game.activeGame
     expect(game).not.toBeNull()
     expect(game?.golfer.id).toBe('ace-omalley')
@@ -118,7 +118,7 @@ describe('NewGamePage', () => {
     const { store } = renderPage()
     const user = userEvent.setup()
     await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
-    await user.click(screen.getByRole('button', { name: /start game/i }))
+    await user.click(screen.getByRole('button', { name: /create game/i }))
     expect(store.getState().player.selectedGolfer?.id).toBe('ace-omalley')
   })
 
@@ -127,7 +127,7 @@ describe('NewGamePage', () => {
     const user = userEvent.setup()
     await user.click(screen.getByRole('button', { name: /18 holes/i }))
     await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
-    await user.click(screen.getByRole('button', { name: /start game/i }))
+    await user.click(screen.getByRole('button', { name: /create game/i }))
     expect(store.getState().game.activeGame?.holes).toBe(18)
   })
 })
