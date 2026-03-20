@@ -9,18 +9,17 @@ import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectSelectedGolfer } from '../store/playerSlice'
-import NewGameModal from './NewGameModal'
 import DeckPanel from './DeckPanel'
 import ShotOverlay from './ShotOverlay'
 
 export default function Layout() {
   const selectedGolfer = useSelector(selectSelectedGolfer)
+  const navigate = useNavigate()
 
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
-  const [newGameOpen, setNewGameOpen] = useState(false)
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget)
@@ -30,13 +29,9 @@ export default function Layout() {
     setMenuAnchor(null)
   }
 
-  const handleNewGameOpen = () => {
+  const handleNewGame = () => {
     handleMenuClose()
-    setNewGameOpen(true)
-  }
-
-  const handleNewGameClose = () => {
-    setNewGameOpen(false)
+    navigate('/new-game')
   }
 
   return (
@@ -98,13 +93,10 @@ export default function Layout() {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleNewGameOpen}>New Game</MenuItem>
+            <MenuItem onClick={handleNewGame}>New Game</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
-
-      {/* New Game modal */}
-      <NewGameModal open={newGameOpen} onClose={handleNewGameClose} />
 
       {/* Main content: two panels */}
       <Box

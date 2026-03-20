@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
+import gameReducer from '../store/game'
 import theme from '../theme'
 import NewGameModal from './NewGameModal'
 
@@ -14,6 +15,7 @@ function makeStore() {
     reducer: {
       [apiSlice.reducerPath]: apiSlice.reducer,
       player: playerReducer,
+      game: gameReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),

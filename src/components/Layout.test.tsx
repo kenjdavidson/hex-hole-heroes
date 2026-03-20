@@ -1,14 +1,15 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { configureStore } from '@reduxjs/toolkit'
 import { apiSlice } from '../store/apiSlice'
 import playerReducer from '../store/playerSlice'
 import deckReducer from '../store/deckSlice'
 import shotReducer from '../store/shotSlice'
+import gameReducer from '../store/game'
 import theme from '../theme'
 import Layout from './Layout'
 
@@ -19,6 +20,7 @@ function makeStore() {
       player: playerReducer,
       deck: deckReducer,
       shot: shotReducer,
+      game: gameReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),
@@ -34,6 +36,31 @@ function renderLayout() {
         <MemoryRouter>
           <ThemeProvider theme={theme}>
             <Layout />
+          </ThemeProvider>
+        </MemoryRouter>
+      </Provider>,
+    ),
+  }
+}
+
+/** Render Layout inside a minimal route tree so navigation actually works. */
+function renderLayoutWithRoutes(initialPath = '/') {
+  const store = makeStore()
+  return {
+    store,
+    ...render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={[initialPath]}>
+          <ThemeProvider theme={theme}>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={null} />
+                <Route
+                  path="new-game"
+                  element={<div>New Game Page</div>}
+                />
+              </Route>
+            </Routes>
           </ThemeProvider>
         </MemoryRouter>
       </Provider>,
@@ -82,38 +109,11 @@ describe('Layout', () => {
     expect(screen.getByText('New Game')).toBeInTheDocument()
   })
 
-  it('opens the New Game modal when "New Game" is clicked', async () => {
-    renderLayout()
+  it('navigates to /new-game when "New Game" is clicked', async () => {
+    renderLayoutWithRoutes('/')
     const user = userEvent.setup()
     await user.click(screen.getByLabelText('open menu'))
     await user.click(screen.getByText('New Game'))
-    expect(
-      screen.getByText('New Game — Choose Your Golfer'),
-    ).toBeInTheDocument()
-    expect(screen.getByText("'Ace' O'Malley")).toBeInTheDocument()
-    expect(screen.getByText("'Boomer' Benson")).toBeInTheDocument()
-  })
-
-  it('updates selected player and status bar when a golfer card is clicked', async () => {
-    renderLayout()
-    const user = userEvent.setup()
-    await user.click(screen.getByLabelText('open menu'))
-    await user.click(screen.getByText('New Game'))
-    await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
-    expect(screen.getByLabelText('selected player icon')).toHaveTextContent('ACE')
-    expect(screen.getByText(/Active golfer: 'Ace' O'Malley/i)).toBeInTheDocument()
-  })
-
-  it('closes the modal after selecting a golfer', async () => {
-    renderLayout()
-    const user = userEvent.setup()
-    await user.click(screen.getByLabelText('open menu'))
-    await user.click(screen.getByText('New Game'))
-    await user.click(screen.getByLabelText("Select 'Ace' O'Malley"))
-    await waitFor(() => {
-      expect(
-        screen.queryByText('New Game — Choose Your Golfer'),
-      ).not.toBeInTheDocument()
-    })
+    expect(screen.getByText('New Game Page')).toBeInTheDocument()
   })
 })
