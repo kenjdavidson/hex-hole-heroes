@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
@@ -46,23 +47,22 @@ export default function NewGamePage() {
         flexDirection: 'column',
         height: '100%',
         p: 4,
-        gap: 3,
       }}
     >
-      <Typography variant="h4" component="h1" fontWeight="bold" textAlign="center">
-        New Game
-      </Typography>
-
-      {/* Single column, 80% width, left-justified */}
-      <Box
+      <Container
+        maxWidth="lg"
+        disableGutters
         sx={{
-          width: '80%',
           display: 'flex',
           flexDirection: 'column',
           gap: 3,
           flexGrow: 1,
         }}
       >
+        <Typography variant="h4" component="h1" fontWeight="bold">
+          New Game
+        </Typography>
+
         {/* Golfer selection */}
         <Box>
           <Typography variant="h6" gutterBottom>
@@ -119,7 +119,7 @@ export default function NewGamePage() {
             Create Game
           </Button>
         </Box>
-      </Box>
+      </Container>
     </Box>
   )
 }
