@@ -53,10 +53,18 @@ export default function NewGamePage() {
         New Game
       </Typography>
 
-      {/* Two-column body */}
-      <Box sx={{ display: 'flex', flexGrow: 1, gap: 4, overflow: 'auto' }}>
-        {/* Left column: Golfer selection */}
-        <Box sx={{ flex: 1 }}>
+      {/* Single column, 80% width, left-justified */}
+      <Box
+        sx={{
+          width: '80%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          flexGrow: 1,
+        }}
+      >
+        {/* Golfer selection */}
+        <Box>
           <Typography variant="h6" gutterBottom>
             Choose Your Golfer
           </Typography>
@@ -65,7 +73,6 @@ export default function NewGamePage() {
               display: 'flex',
               flexWrap: 'wrap',
               gap: 2,
-              justifyContent: 'center',
             }}
           >
             {availableGolfers.map((golfer) => (
@@ -80,45 +87,37 @@ export default function NewGamePage() {
           </Box>
         </Box>
 
-        {/* Right column: Game options + Create Game */}
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-          }}
-        >
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Number of Holes
-            </Typography>
-            <ToggleButtonGroup
-              value={holes}
-              exclusive
-              onChange={handleHolesChange}
-              aria-label="number of holes"
-            >
-              <ToggleButton value={9} aria-label="9 holes">
-                9 Holes
-              </ToggleButton>
-              <ToggleButton value={18} aria-label="18 holes">
-                18 Holes
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
+        {/* Number of holes */}
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Number of Holes
+          </Typography>
+          <ToggleButtonGroup
+            value={holes}
+            exclusive
+            onChange={handleHolesChange}
+            aria-label="number of holes"
+          >
+            <ToggleButton value={9} aria-label="9 holes">
+              9 Holes
+            </ToggleButton>
+            <ToggleButton value={18} aria-label="18 holes">
+              18 Holes
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
 
-          <Box sx={{ mt: 'auto' }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleStartGame}
-              disabled={!selectedGolfer}
-              aria-label="create game"
-            >
-              Create Game
-            </Button>
-          </Box>
+        {/* Create Game at the bottom */}
+        <Box sx={{ mt: 'auto' }}>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleStartGame}
+            disabled={!selectedGolfer}
+            aria-label="create game"
+          >
+            Create Game
+          </Button>
         </Box>
       </Box>
     </Box>
