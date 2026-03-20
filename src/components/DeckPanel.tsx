@@ -13,19 +13,27 @@ const SCALE = 0.48
 const SCALED_CARD_WIDTH = Math.round(CARD_WIDTH * SCALE)   // ~61 px
 const SCALED_CARD_HEIGHT = Math.round(CARD_HEIGHT * SCALE)  // ~86 px
 
-/** Maximum step between cards within a row to keep them nicely overlapped */
-const MAX_CARD_STEP = Math.round(SCALED_CARD_WIDTH * 0.55) // ~34 px
+/**
+ * Maximum step between cards within a row — 70% of card width so more of each
+ * card face is visible (less overlap than the original 55%).
+ */
+const MAX_CARD_STEP = Math.round(SCALED_CARD_WIDTH * 0.70) // ~43 px
 /** Fallback step when container width is not yet measured */
 const DEFAULT_CARD_STEP = 24
 /** Maximum cards shown in a single row before wrapping to a new row */
 const CARDS_PER_ROW = 7
 /** Vertical distance between rows — rows overlap so only the top portion of each row is exposed */
 const ROW_STEP_Y = Math.round(SCALED_CARD_HEIGHT * 0.55)   // ~47 px
+/**
+ * Horizontal offset applied to each successive row so the rows are visually
+ * staggered — half a card step to the right per row.
+ */
+const ROW_OFFSET_X = Math.round(MAX_CARD_STEP * 0.5)       // ~21 px
 /** Extra bottom padding below the last row */
 const CONTAINER_BOTTOM_PAD = 12
 /**
- * Z-index multiplier per row — must be > CARDS_PER_ROW so each row's fan z-values
- * (1…CARDS_PER_ROW) don't bleed into the next row's range.
+ * Z-index stride per row — must be > CARDS_PER_ROW so z-values for cards within
+ * a row (1…CARDS_PER_ROW) don't bleed into the next row's range.
  */
 const Z_ROW_STRIDE = CARDS_PER_ROW * 2
 
@@ -78,17 +86,18 @@ export default function DeckPanel() {
           const posInRow = idx % CARDS_PER_ROW
           const cardsInRow = Math.min(CARDS_PER_ROW, n - rowIdx * CARDS_PER_ROW)
 
-          // Horizontal step for this row: spread to fill width, capped at MAX_CARD_STEP
+          // Horizontal step: available spread width for this row excludes the row's starting
+          // offset and one card width (for the last card), so the guard is simply > 0.
+          const spreadWidth = containerWidth - rowIdx * ROW_OFFSET_X - SCALED_CARD_WIDTH
           const rowSpread =
-            cardsInRow > 1 && containerWidth > SCALED_CARD_WIDTH
-              ? (containerWidth - SCALED_CARD_WIDTH) / (cardsInRow - 1)
+            cardsInRow > 1 && spreadWidth > 0
+              ? spreadWidth / (cardsInRow - 1)
               : DEFAULT_CARD_STEP
           const rowStep = Math.min(rowSpread, MAX_CARD_STEP)
 
-          // Center cards in the row have higher z-index (fan effect); later rows are in front
-          const rowCenter = (cardsInRow - 1) / 2
-          const fanZ = Math.max(1, cardsInRow - Math.round(Math.abs(posInRow - rowCenter)))
-          const zIndex = rowIdx * Z_ROW_STRIDE + fanZ
+          // Left-to-right stacking: rightmost card has the highest z-index, like holding cards.
+          // Later rows are in front of earlier rows via Z_ROW_STRIDE.
+          const zIndex = rowIdx * Z_ROW_STRIDE + posInRow + 1
 
           return (
             <Box
@@ -96,7 +105,7 @@ export default function DeckPanel() {
               sx={{
                 position: 'absolute',
                 top: rowIdx * ROW_STEP_Y,
-                left: posInRow * rowStep,
+                left: rowIdx * ROW_OFFSET_X + posInRow * rowStep,
                 width: SCALED_CARD_WIDTH,
                 height: SCALED_CARD_HEIGHT,
                 overflow: 'hidden',
