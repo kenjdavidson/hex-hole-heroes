@@ -10,6 +10,7 @@ import shotReducer, {
   selectSelectedClubId,
   selectLastShot,
 } from './shotSlice'
+import gameReducer from './gameSlice'
 import type { ShotResult } from '../types/shot'
 
 function makeStore() {
@@ -19,6 +20,7 @@ function makeStore() {
       player: playerReducer,
       deck: deckReducer,
       shot: shotReducer,
+      game: gameReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(apiSlice.middleware),
