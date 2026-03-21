@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { Stage, Layer, Line, Rect } from 'react-konva'
 import { defineHex, Grid, rectangle, Orientation } from 'honeycomb-grid'
 import Box from '@mui/material/Box'
@@ -24,6 +24,21 @@ export default function HexBoard() {
   const ballQ = useHexStore((s) => s.ballQ)
   const ballR = useHexStore((s) => s.ballR)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const ro = new ResizeObserver((entries) => {
+      if (!entries.length) return
+      const { width, height } = entries[0].contentRect
+      setContainerSize({ width, height })
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   const { hexes, stageWidth, stageHeight } = useMemo(() => {
     const grid = new Grid(HexTile, rectangle({ width: GRID_COLS, height: GRID_ROWS }))
     return {
@@ -33,10 +48,15 @@ export default function HexBoard() {
     }
   }, [])
 
+  const displayWidth = containerSize.width || stageWidth
+  const displayHeight = containerSize.height || stageHeight
+  const scaleX = stageWidth > 0 ? displayWidth / stageWidth : 1
+  const scaleY = stageHeight > 0 ? displayHeight / stageHeight : 1
+
   return (
-    <Box sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-      <Stage width={stageWidth} height={stageHeight}>
-        <Layer>
+    <Box ref={containerRef} sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
+      <Stage width={displayWidth} height={displayHeight}>
+        <Layer scaleX={scaleX} scaleY={scaleY}>
           <Rect x={0} y={0} width={stageWidth} height={stageHeight} fill={ROUGH_FILL} />
           {hexes.map((hex) => {
             const points = hex.corners.flatMap((c) => [c.x, c.y])
