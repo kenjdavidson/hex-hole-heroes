@@ -1,4 +1,16 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import React from 'react'
+
+vi.mock('react-konva', () => ({
+  Stage: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="stage">{children}</div>
+  ),
+  Layer: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="layer">{children}</div>
+  ),
+  Rect: () => null,
+  Line: () => null,
+}))
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
@@ -72,7 +84,7 @@ describe('App', () => {
     const store = makeStore()
     store.dispatch(startGame({ golfer: sampleGolfer, clubs: [], holes: 9 }))
     renderApp('/', store)
-    expect(screen.getByText(/Coming Soon/i)).toBeInTheDocument()
+    expect(screen.getByTestId('stage')).toBeInTheDocument()
   })
 
   it('shows the new game page at /new-game', () => {
