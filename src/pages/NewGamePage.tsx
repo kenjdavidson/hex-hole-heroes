@@ -55,7 +55,7 @@ export default function NewGamePage() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 3,
+          gap: 5,
           flexGrow: 1,
         }}
       >
@@ -73,6 +73,7 @@ export default function NewGamePage() {
               display: 'flex',
               flexWrap: 'wrap',
               gap: 2,
+              py: 1,
             }}
           >
             {availableGolfers.map((golfer) => (
