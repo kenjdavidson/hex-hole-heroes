@@ -11,6 +11,9 @@ vi.mock('react-konva', () => ({
   Layer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="layer">{children}</div>
   ),
+  Rect: ({ fill }: { fill: string }) => (
+    <div data-testid="bg-rect" data-fill={fill} />
+  ),
   Line: ({
     points,
     fill,
@@ -30,15 +33,22 @@ vi.mock('react-konva', () => ({
 }))
 
 describe('HexBoard', () => {
+  it('renders a background rect with rough fill colour', () => {
+    render(<HexBoard />)
+    const bgRect = screen.getByTestId('bg-rect')
+    expect(bgRect).toBeInTheDocument()
+    expect(bgRect.getAttribute('data-fill')).toBe('#5C7A2E')
+  })
+
   it('renders the Konva stage', () => {
     render(<HexBoard />)
     expect(screen.getByTestId('stage')).toBeInTheDocument()
   })
 
-  it('renders 1512 hexagons for a 42×36 grid', () => {
+  it('renders 2688 hexagons for a 56×48 grid', () => {
     render(<HexBoard />)
     const hexEls = screen.getAllByTestId('hex')
-    expect(hexEls).toHaveLength(1512)
+    expect(hexEls).toHaveLength(2688)
   })
 
   it('all hexagons default to rough fill colour', () => {

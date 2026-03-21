@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
-import { Stage, Layer, Line } from 'react-konva'
+import { Stage, Layer, Line, Rect } from 'react-konva'
 import { defineHex, Grid, rectangle, Orientation } from 'honeycomb-grid'
 import Box from '@mui/material/Box'
 import { useHexStore } from '../store/hexStore'
 
-const APOTHEM = 15
+const APOTHEM = 10
 const CIRCUMRADIUS = (APOTHEM * 2) / Math.sqrt(3)
-const GRID_COLS = 42
-const GRID_ROWS = 36
+const GRID_COLS = 56
+const GRID_ROWS = 48
 
 const ROUGH_FILL = '#5C7A2E'
 const ROUGH_STROKE = '#3D5E1A'
@@ -34,9 +34,10 @@ export default function HexBoard() {
   }, [])
 
   return (
-    <Box sx={{ overflow: 'auto', width: '100%', height: '100%' }}>
+    <Box sx={{ overflow: 'hidden', width: '100%', height: '100%' }}>
       <Stage width={stageWidth} height={stageHeight}>
         <Layer>
+          <Rect x={0} y={0} width={stageWidth} height={stageHeight} fill={ROUGH_FILL} />
           {hexes.map((hex) => {
             const points = hex.corners.flatMap((c) => [c.x, c.y])
             const isBall = hex.q === ballQ && hex.r === ballR

@@ -8,6 +8,7 @@ vi.mock('react-konva', () => ({
   Layer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="layer">{children}</div>
   ),
+  Rect: () => null,
   Line: () => null,
 }))
 import { render, screen } from '@testing-library/react'
