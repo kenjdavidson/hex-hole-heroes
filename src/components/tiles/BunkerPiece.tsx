@@ -1,18 +1,15 @@
 import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
-const WATER_FILL = '#1565C0'
-const WATER_STROKE = '#0D47A1'
-
-/** Three hexes in a compact triangle; origin is the "top-left" hex. */
+/** Two adjacent hexes; origin is the first hex. */
 const OFFSETS = [
   { dq: 0, dr: 0 },
   { dq: 1, dr: 0 },
-  { dq: 0, dr: 1 },
 ]
 
-export default function WaterStamp({ origin, rotation = 0 }: StampProps) {
+export default function BunkerPiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -25,8 +22,8 @@ export default function WaterStamp({ origin, rotation = 0 }: StampProps) {
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={WATER_FILL}
-            stroke={WATER_STROKE}
+            fill={TerrainColors.SAND_FILL}
+            stroke={TerrainColors.SAND_STROKE}
             strokeWidth={1}
           />
         )

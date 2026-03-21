@@ -1,14 +1,16 @@
 import { Group, Line } from 'react-konva'
-import { HexTile, getHexCenter, buildRectOffsets } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
+import { HexTile, getHexCenter } from '../../utils/hexGrid'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
-const TEE_FILL = '#9E9E9E'
-const TEE_STROKE = '#616161'
+/** Three hexes in a straight horizontal axial line; origin is the middle hex. */
+const OFFSETS = [
+  { dq: -1, dr: 0 },
+  { dq: 0, dr: 0 },
+  { dq: 1, dr: 0 },
+]
 
-/** 3×6 = 18 hexes; origin at the hex closest to the visual centre. */
-const OFFSETS = buildRectOffsets(3, 6)
-
-export default function TeeStamp({ origin, rotation = 0 }: StampProps) {
+export default function FairwayLinePiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -21,8 +23,8 @@ export default function TeeStamp({ origin, rotation = 0 }: StampProps) {
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={TEE_FILL}
-            stroke={TEE_STROKE}
+            fill={TerrainColors.FAIRWAY_FILL}
+            stroke={TerrainColors.FAIRWAY_STROKE}
             strokeWidth={1}
           />
         )

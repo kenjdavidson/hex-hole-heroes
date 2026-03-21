@@ -1,12 +1,10 @@
 import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter, buildElbowOffsets } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
-
-const FAIRWAY_FILL = '#228B22'
-const FAIRWAY_STROKE = '#145214'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
 /**
- * Convex 60° dogleg fairway stamp.
+ * Convex 60° dogleg fairway piece.
  *
  * Shape: convex hull of two 5-wide arms (armLen=5 hexes each) meeting at a
  * clockwise 60° bend (E → SE direction) = 55 hexes.  The origin hex sits at
@@ -22,7 +20,7 @@ const FAIRWAY_STROKE = '#145214'
  */
 const OFFSETS = buildElbowOffsets(5, 5)
 
-export default function FairwayElbow60Stamp({ origin, rotation = 0 }: StampProps) {
+export default function FairwayElbow60Piece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -35,8 +33,8 @@ export default function FairwayElbow60Stamp({ origin, rotation = 0 }: StampProps
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={FAIRWAY_FILL}
-            stroke={FAIRWAY_STROKE}
+            fill={TerrainColors.FAIRWAY_FILL}
+            stroke={TerrainColors.FAIRWAY_STROKE}
             strokeWidth={1}
           />
         )

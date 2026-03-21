@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import WaterStamp from './WaterStamp'
+import BunkerPiece from './BunkerPiece'
 
 vi.mock('react-konva', () => ({
   Group: ({ children, x, y, rotation }: { children: React.ReactNode; x: number; y: number; rotation: number }) => (
@@ -14,31 +14,31 @@ vi.mock('react-konva', () => ({
   ),
 }))
 
-describe('WaterStamp', () => {
-  it('renders 3 hexes', () => {
-    render(<WaterStamp origin={{ q: 0, r: 0 }} />)
-    expect(screen.getAllByTestId('hex')).toHaveLength(3)
+describe('BunkerPiece', () => {
+  it('renders 2 hexes', () => {
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(2)
   })
 
-  it('renders hexes with blue fill', () => {
-    render(<WaterStamp origin={{ q: 0, r: 0 }} />)
+  it('renders hexes with sand fill', () => {
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} />)
     const hexes = screen.getAllByTestId('hex')
-    expect(hexes.every((h) => h.getAttribute('data-fill') === '#1565C0')).toBe(true)
+    expect(hexes.every((h) => h.getAttribute('data-fill') === '#C8B400')).toBe(true)
   })
 
   it('renders all closed polygons', () => {
-    render(<WaterStamp origin={{ q: 0, r: 0 }} />)
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} />)
     const hexes = screen.getAllByTestId('hex')
     expect(hexes.every((h) => h.getAttribute('data-closed') === 'true')).toBe(true)
   })
 
   it('defaults rotation to 0', () => {
-    render(<WaterStamp origin={{ q: 0, r: 0 }} />)
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} />)
     expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('0')
   })
 
   it('applies a custom rotation', () => {
-    render(<WaterStamp origin={{ q: 0, r: 0 }} rotation={60} />)
-    expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('60')
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} rotation={30} />)
+    expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('30')
   })
 })

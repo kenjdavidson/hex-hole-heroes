@@ -1,17 +1,12 @@
 import { Group, Line } from 'react-konva'
-import { HexTile, getHexCenter } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
+import { HexTile, getHexCenter, buildRectOffsets } from '../../utils/hexGrid'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
-const BUNKER_FILL = '#F0E68C'
-const BUNKER_STROKE = '#B8860B'
+/** 3×6 = 18 hexes; origin at the hex closest to the visual centre. */
+const OFFSETS = buildRectOffsets(3, 6)
 
-/** Two adjacent hexes; origin is the first hex. */
-const OFFSETS = [
-  { dq: 0, dr: 0 },
-  { dq: 1, dr: 0 },
-]
-
-export default function BunkerStamp({ origin, rotation = 0 }: StampProps) {
+export default function TeePiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -24,8 +19,8 @@ export default function BunkerStamp({ origin, rotation = 0 }: StampProps) {
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={BUNKER_FILL}
-            stroke={BUNKER_STROKE}
+            fill={TerrainColors.TEE_FILL}
+            stroke={TerrainColors.TEE_STROKE}
             strokeWidth={1}
           />
         )

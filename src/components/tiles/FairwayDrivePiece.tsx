@@ -1,9 +1,7 @@
 import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter, buildRectOffsets } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
-
-const FAIRWAY_FILL = '#228B22'
-const FAIRWAY_STROKE = '#145214'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
 /**
  * 16×5 = 80 hexes; origin at the visual centre.
@@ -12,7 +10,7 @@ const FAIRWAY_STROKE = '#145214'
  */
 const OFFSETS = buildRectOffsets(16, 5)
 
-export default function FairwayDriveStamp({ origin, rotation = 0 }: StampProps) {
+export default function FairwayDrivePiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -25,8 +23,8 @@ export default function FairwayDriveStamp({ origin, rotation = 0 }: StampProps) 
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={FAIRWAY_FILL}
-            stroke={FAIRWAY_STROKE}
+            fill={TerrainColors.FAIRWAY_FILL}
+            stroke={TerrainColors.FAIRWAY_STROKE}
             strokeWidth={1}
           />
         )

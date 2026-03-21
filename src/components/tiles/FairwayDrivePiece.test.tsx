@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import BunkerStamp from './BunkerStamp'
+import FairwayDrivePiece from './FairwayDrivePiece'
 
 vi.mock('react-konva', () => ({
   Group: ({ children, x, y, rotation }: { children: React.ReactNode; x: number; y: number; rotation: number }) => (
@@ -14,31 +14,31 @@ vi.mock('react-konva', () => ({
   ),
 }))
 
-describe('BunkerStamp', () => {
-  it('renders 2 hexes', () => {
-    render(<BunkerStamp origin={{ q: 0, r: 0 }} />)
-    expect(screen.getAllByTestId('hex')).toHaveLength(2)
+describe('FairwayDrivePiece', () => {
+  it('renders 80 hexes (16×5 drive block)', () => {
+    render(<FairwayDrivePiece origin={{ q: 0, r: 0 }} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(80)
   })
 
-  it('renders hexes with khaki fill', () => {
-    render(<BunkerStamp origin={{ q: 0, r: 0 }} />)
+  it('renders hexes with forest-green fill', () => {
+    render(<FairwayDrivePiece origin={{ q: 0, r: 0 }} />)
     const hexes = screen.getAllByTestId('hex')
-    expect(hexes.every((h) => h.getAttribute('data-fill') === '#F0E68C')).toBe(true)
+    expect(hexes.every((h) => h.getAttribute('data-fill') === '#228B22')).toBe(true)
   })
 
   it('renders all closed polygons', () => {
-    render(<BunkerStamp origin={{ q: 0, r: 0 }} />)
+    render(<FairwayDrivePiece origin={{ q: 0, r: 0 }} />)
     const hexes = screen.getAllByTestId('hex')
     expect(hexes.every((h) => h.getAttribute('data-closed') === 'true')).toBe(true)
   })
 
   it('defaults rotation to 0', () => {
-    render(<BunkerStamp origin={{ q: 0, r: 0 }} />)
+    render(<FairwayDrivePiece origin={{ q: 0, r: 0 }} />)
     expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('0')
   })
 
   it('applies a custom rotation', () => {
-    render(<BunkerStamp origin={{ q: 0, r: 0 }} rotation={30} />)
-    expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('30')
+    render(<FairwayDrivePiece origin={{ q: 0, r: 0 }} rotation={90} />)
+    expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('90')
   })
 })

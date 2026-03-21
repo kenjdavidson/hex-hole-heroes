@@ -1,11 +1,8 @@
 import { Group, Line, Circle } from 'react-konva'
 import { HexTile, getHexCenter } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
-const GREEN_FILL = '#7CFC00'
-const GREEN_STROKE = '#4CAF50'
-const PIN_FILL = '#FFFFFF'
-const PIN_STROKE = '#000000'
 const PIN_RADIUS = 3
 
 /**
@@ -37,7 +34,7 @@ const OFFSETS = [
   { dq: 1, dr: 1 },
 ]
 
-export default function GreenStamp({ origin, rotation = 0 }: StampProps) {
+export default function GreenPiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -50,8 +47,8 @@ export default function GreenStamp({ origin, rotation = 0 }: StampProps) {
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={GREEN_FILL}
-            stroke={GREEN_STROKE}
+            fill={TerrainColors.GREEN_FILL}
+            stroke={TerrainColors.GREEN_STROKE}
             strokeWidth={1}
           />
         )
@@ -61,8 +58,8 @@ export default function GreenStamp({ origin, rotation = 0 }: StampProps) {
         x={0}
         y={0}
         radius={PIN_RADIUS}
-        fill={PIN_FILL}
-        stroke={PIN_STROKE}
+        fill={TerrainColors.PIN_FILL}
+        stroke={TerrainColors.PIN_STROKE}
         strokeWidth={1}
       />
     </Group>

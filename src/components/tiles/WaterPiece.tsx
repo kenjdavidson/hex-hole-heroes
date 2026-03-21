@@ -1,22 +1,16 @@
 import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter } from '../../utils/hexGrid'
-import { StampProps } from './stampTypes'
+import { PieceProps } from './pieceTypes'
+import { TerrainColors } from './terrainColors'
 
-const FAIRWAY_FILL = '#228B22'
-const FAIRWAY_STROKE = '#145214'
-
-/** Center hex plus its six neighbors (pointy-top axial offsets). */
+/** Three hexes in a compact triangle; origin is the "top-left" hex. */
 const OFFSETS = [
   { dq: 0, dr: 0 },
   { dq: 1, dr: 0 },
-  { dq: 1, dr: -1 },
-  { dq: 0, dr: -1 },
-  { dq: -1, dr: 0 },
-  { dq: -1, dr: 1 },
   { dq: 0, dr: 1 },
 ]
 
-export default function FairwayFlowerStamp({ origin, rotation = 0 }: StampProps) {
+export default function WaterPiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -29,8 +23,8 @@ export default function FairwayFlowerStamp({ origin, rotation = 0 }: StampProps)
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={FAIRWAY_FILL}
-            stroke={FAIRWAY_STROKE}
+            fill={TerrainColors.WATER_FILL}
+            stroke={TerrainColors.WATER_STROKE}
             strokeWidth={1}
           />
         )
