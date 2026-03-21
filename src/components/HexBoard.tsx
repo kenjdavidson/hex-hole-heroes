@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Stage, Layer, Line } from 'react-konva'
 import { defineHex, Grid, rectangle, Orientation } from 'honeycomb-grid'
 import Box from '@mui/material/Box'
-import { useGameStore } from '../store/hexStore'
+import { useHexStore } from '../store/hexStore'
 
 const APOTHEM = 15
 const CIRCUMRADIUS = (APOTHEM * 2) / Math.sqrt(3)
@@ -21,8 +21,8 @@ const HexTile = defineHex({
 })
 
 export default function HexBoard() {
-  const ballQ = useGameStore((s) => s.ballQ)
-  const ballR = useGameStore((s) => s.ballR)
+  const ballQ = useHexStore((s) => s.ballQ)
+  const ballR = useHexStore((s) => s.ballR)
 
   const { hexes, stageWidth, stageHeight } = useMemo(() => {
     const grid = new Grid(HexTile, rectangle({ width: GRID_COLS, height: GRID_ROWS }))

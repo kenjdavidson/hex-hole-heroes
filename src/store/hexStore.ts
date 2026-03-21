@@ -6,7 +6,7 @@ export interface HexStoreState {
   setBallPosition: (q: number, r: number) => void
 }
 
-export const useGameStore = create<HexStoreState>((set) => ({
+export const useHexStore = create<HexStoreState>((set) => ({
   ballQ: 0,
   ballR: 0,
   setBallPosition: (q, r) => set({ ballQ: q, ballR: r }),

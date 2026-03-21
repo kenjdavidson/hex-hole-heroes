@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import HexBoard from './HexBoard'
-import { useGameStore } from '../store/hexStore'
+import { useHexStore } from '../store/hexStore'
 
 vi.mock('react-konva', () => ({
   Stage: ({ children }: { children: React.ReactNode }) => (
@@ -42,7 +42,7 @@ describe('HexBoard', () => {
   })
 
   it('all hexagons default to rough fill colour', () => {
-    useGameStore.setState({ ballQ: -999, ballR: -999 })
+    useHexStore.setState({ ballQ: -999, ballR: -999 })
     render(<HexBoard />)
     const hexEls = screen.getAllByTestId('hex')
     const roughFill = '#5C7A2E'
@@ -50,7 +50,7 @@ describe('HexBoard', () => {
   })
 
   it('marks the ball hex with a different fill colour', () => {
-    useGameStore.setState({ ballQ: 0, ballR: 0 })
+    useHexStore.setState({ ballQ: 0, ballR: 0 })
     render(<HexBoard />)
     const hexEls = screen.getAllByTestId('hex')
     const whiteFills = hexEls.filter((el) => el.getAttribute('data-fill') === '#FFFFFF')
