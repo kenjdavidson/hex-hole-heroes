@@ -8,6 +8,7 @@ A golf-based hex board game prototype built as a web application. Players naviga
 - **Vite** — Fast build tooling and dev server
 - **React Router v6** — Client-side routing
 - **Redux Toolkit** + **RTK Query** — State management and future multiplayer API
+- **Zustand** — Lightweight local canvas state
 - **Material UI (MUI)** — Component library and theming
 - **Vitest** + **React Testing Library** — Unit and integration testing
 
@@ -48,6 +49,35 @@ npm run test:coverage
 npm run build
 ```
 
+## State Management
+
+The app uses **two separate stores** that manage different concerns:
+
+### Redux Store (`src/store/`)
+
+Manages **game-level state** that needs to persist across sessions and is shared across multiple UI components:
+
+| What | Where | Why Redux |
+|---|---|---|
+| Active game (golfer, clubs, holes, score) | `store/game/slice.ts` | Persisted to `localStorage` via a listener middleware; consumed by the app shell, scorecard, and routing guards |
+| Future multiplayer API calls | `store/apiSlice.ts` | RTK Query is ready to wire up a backend once needed |
+
+Redux is the right choice here because the game session is **serialised state** — it survives page reloads, is read by many components at once, and will eventually travel over the wire to a server.
+
+### Zustand Store (`src/store/hexStore.ts`)
+
+Manages **transient canvas state** that only the board rendering layer needs to know about:
+
+| What | Where | Why Zustand |
+|---|---|---|
+| Ball hex coordinates `(q, r)` | `hexStore.ts` | Updated on every move; only consumed by `HexBoard`; never needs to persist or be serialised |
+
+Zustand is the right choice here because ball position is **high-frequency, render-local state** — it changes on every shot and only drives a single canvas component. Using the heavier Redux machinery for this would add unnecessary boilerplate and dispatch overhead.
+
+---
+
+**Rule of thumb:** if the state needs to be saved, shared across routes, or sent to a server → **Redux**. If it only drives the canvas and can be discarded on refresh → **Zustand**.
+
 ## Project Structure
 
 ```
@@ -57,12 +87,18 @@ src/
 ├── App.test.tsx          # App smoke test
 ├── store/
 │   ├── index.ts          # Redux store configuration
-│   └── apiSlice.ts       # RTK Query API slice (multiplayer-ready)
+│   ├── apiSlice.ts       # RTK Query API slice (multiplayer-ready)
+│   ├── hexStore.ts       # Zustand store — transient ball position (q, r)
+│   └── game/
+│       ├── slice.ts      # Redux game reducer (startGame / clearGame)
+│       ├── listeners.ts  # localStorage persistence middleware
+│       └── index.ts      # Barrel export
 ├── pages/
-│   ├── HomePage.tsx      # Landing / game lobby page
+│   ├── HomePage.tsx      # Landing / game board page
 │   └── NotFoundPage.tsx  # 404 page
 └── components/
-    └── Layout.tsx        # App shell with navigation
+    ├── Layout.tsx         # App shell with navigation
+    └── HexBoard.tsx       # react-konva hex grid canvas (56×48)
 ```
 
 ## License & Trademark
