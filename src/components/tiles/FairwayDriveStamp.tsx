@@ -2,13 +2,17 @@ import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter, buildRectOffsets } from '../../utils/hexGrid'
 import { StampProps } from './stampTypes'
 
-const TEE_FILL = '#9E9E9E'
-const TEE_STROKE = '#616161'
+const FAIRWAY_FILL = '#228B22'
+const FAIRWAY_STROKE = '#145214'
 
-/** 3×6 = 18 hexes; origin at the hex closest to the visual centre. */
-const OFFSETS = buildRectOffsets(3, 6)
+/**
+ * 16×5 = 80 hexes; origin at the visual centre.
+ * Two blocks placed end-to-end cover a Par 4 (~32 hex length).
+ * Three blocks cover a Par 5 (~48 hex length).
+ */
+const OFFSETS = buildRectOffsets(16, 5)
 
-export default function TeeStamp({ origin, rotation = 0 }: StampProps) {
+export default function FairwayDriveStamp({ origin, rotation = 0 }: StampProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)
 
   return (
@@ -21,8 +25,8 @@ export default function TeeStamp({ origin, rotation = 0 }: StampProps) {
             key={`${dq},${dr}`}
             points={points}
             closed
-            fill={TEE_FILL}
-            stroke={TEE_STROKE}
+            fill={FAIRWAY_FILL}
+            stroke={FAIRWAY_STROKE}
             strokeWidth={1}
           />
         )

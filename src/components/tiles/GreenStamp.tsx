@@ -8,15 +8,33 @@ const PIN_FILL = '#FFFFFF'
 const PIN_STROKE = '#000000'
 const PIN_RADIUS = 3
 
-/** Center hex (The Pin) plus six fringe neighbors. */
+/**
+ * Mega-Flower: center + ring 1 (6 hexes) + ring 2 (12 hexes) = 19 hexes.
+ * The origin hex (0,0) is the pin/hole position.
+ */
 const OFFSETS = [
+  // Center — the pin
   { dq: 0, dr: 0 },
+  // Ring 1: immediate neighbors
   { dq: 1, dr: 0 },
   { dq: 1, dr: -1 },
   { dq: 0, dr: -1 },
   { dq: -1, dr: 0 },
   { dq: -1, dr: 1 },
   { dq: 0, dr: 1 },
+  // Ring 2: hexes at axial distance 2
+  { dq: 2, dr: 0 },
+  { dq: 2, dr: -1 },
+  { dq: 2, dr: -2 },
+  { dq: 1, dr: -2 },
+  { dq: 0, dr: -2 },
+  { dq: -1, dr: -1 },
+  { dq: -2, dr: 0 },
+  { dq: -2, dr: 1 },
+  { dq: -2, dr: 2 },
+  { dq: -1, dr: 2 },
+  { dq: 0, dr: 2 },
+  { dq: 1, dr: 1 },
 ]
 
 export default function GreenStamp({ origin, rotation = 0 }: StampProps) {
@@ -38,7 +56,7 @@ export default function GreenStamp({ origin, rotation = 0 }: StampProps) {
           />
         )
       })}
-      {/* Pin / hole marker at the origin hex centre */}
+      {/* Pin / hole marker at the origin hex centre (isHole position) */}
       <Circle
         x={0}
         y={0}

@@ -18,9 +18,9 @@ vi.mock('react-konva', () => ({
 }))
 
 describe('GreenStamp', () => {
-  it('renders 7 hexes', () => {
+  it('renders 19 hexes (Mega-Flower: center + 2 rings)', () => {
     render(<GreenStamp origin={{ q: 0, r: 0 }} />)
-    expect(screen.getAllByTestId('hex')).toHaveLength(7)
+    expect(screen.getAllByTestId('hex')).toHaveLength(19)
   })
 
   it('renders hexes with lawn-green fill', () => {

@@ -1,6 +1,7 @@
 export { default as TeeStamp } from './TeeStamp'
 export { default as FairwayLineStamp } from './FairwayLineStamp'
 export { default as FairwayFlowerStamp } from './FairwayFlowerStamp'
+export { default as FairwayDriveStamp } from './FairwayDriveStamp'
 export { default as GreenStamp } from './GreenStamp'
 export { default as BunkerStamp } from './BunkerStamp'
 export { default as WaterStamp } from './WaterStamp'
