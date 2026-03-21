@@ -56,8 +56,11 @@ export default function PlayerCard({
         height,
         cursor: 'pointer',
         userSelect: 'none',
-        transition: 'transform 0.2s ease',
+        transition: 'transform 0.2s ease, filter 0.2s ease',
         transform: selected ? 'scale(1.12)' : 'scale(1)',
+        filter: selected
+          ? `drop-shadow(0 6px 14px rgba(0,0,0,0.55)) drop-shadow(0 0 8px ${golfer.ui.primaryColor})`
+          : 'none',
         '&:hover': { transform: selected ? 'scale(1.17)' : 'scale(1.06)' },
         '&:focus-visible': {
           outline: `3px solid ${golfer.ui.primaryColor}`,
@@ -73,10 +76,8 @@ export default function PlayerCard({
           inset: 0,
           bgcolor: selected ? 'rgba(255,255,255,0.95)' : golfer.ui.primaryColor,
           clipPath: HEX_CLIP,
-          transition: 'background-color 0.2s ease, filter 0.2s ease',
-          filter: selected
-            ? `drop-shadow(0 0 10px ${golfer.ui.primaryColor}) drop-shadow(0 0 6px rgba(255,255,255,0.8))`
-            : 'none',
+          transition: 'background-color 0.2s ease',
+          filter: 'none',
         }}
         aria-hidden
       />
