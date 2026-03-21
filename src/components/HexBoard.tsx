@@ -4,10 +4,10 @@ import { defineHex, Grid, rectangle, Orientation } from 'honeycomb-grid'
 import Box from '@mui/material/Box'
 import { useHexStore } from '../store/hexStore'
 
-const APOTHEM = 10
+const APOTHEM = 7
 const CIRCUMRADIUS = (APOTHEM * 2) / Math.sqrt(3)
-const GRID_COLS = 56
-const GRID_ROWS = 48
+const GRID_COLS = 80
+const GRID_ROWS = 60
 
 const ROUGH_FILL = '#5C7A2E'
 const ROUGH_STROKE = '#3D5E1A'

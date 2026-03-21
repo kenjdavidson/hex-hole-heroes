@@ -98,7 +98,7 @@ src/
 │   └── NotFoundPage.tsx  # 404 page
 └── components/
     ├── Layout.tsx         # App shell with navigation
-    └── HexBoard.tsx       # react-konva hex grid canvas (56×48)
+    └── HexBoard.tsx       # react-konva hex grid canvas (80×60)
 ```
 
 ## License & Trademark

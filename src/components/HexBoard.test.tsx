@@ -45,10 +45,10 @@ describe('HexBoard', () => {
     expect(screen.getByTestId('stage')).toBeInTheDocument()
   })
 
-  it('renders 2688 hexagons for a 56×48 grid', () => {
+  it('renders 4800 hexagons for a 80×60 grid', () => {
     render(<HexBoard />)
     const hexEls = screen.getAllByTestId('hex')
-    expect(hexEls).toHaveLength(2688)
+    expect(hexEls).toHaveLength(4800)
   })
 
   it('all hexagons default to rough fill colour', () => {
