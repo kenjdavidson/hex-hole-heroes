@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAllClubs } from '../store/deckSlice'
 import { selectSelectedGolfer } from '../store/playerSlice'
@@ -7,28 +7,15 @@ import { selectClub, selectSelectedClubId } from '../store/shotSlice'
 import type { Club } from '../types/club'
 import ClubCard, { CARD_WIDTH, CARD_HEIGHT } from './ClubCard'
 
-/** Scale factor applied to the full card for the bag hand (20% larger than original 0.4) */
-const SCALE = 0.48
-/** Visual dimensions of a scaled card */
-const SCALED_CARD_WIDTH = Math.round(CARD_WIDTH * SCALE)   // ~61 px
-const SCALED_CARD_HEIGHT = Math.round(CARD_HEIGHT * SCALE)  // ~86 px
-
-/**
- * Maximum step between cards within a row — 70% of card width so more of each
- * card face is visible (less overlap than the original 55%).
- */
-const MAX_CARD_STEP = Math.round(SCALED_CARD_WIDTH * 0.70) // ~43 px
-/** Fallback step when container width is not yet measured */
-const DEFAULT_CARD_STEP = 24
 /** Maximum cards shown in a single row before wrapping to a new row */
 const CARDS_PER_ROW = 7
-/** Vertical distance between rows — rows overlap so only the top portion of each row is exposed */
-const ROW_STEP_Y = Math.round(SCALED_CARD_HEIGHT * 0.55)   // ~47 px
-/**
- * Horizontal offset applied to each successive row so the rows are visually
- * staggered — half a card step to the right per row.
- */
-const ROW_OFFSET_X = Math.round(MAX_CARD_STEP * 0.5)       // ~21 px
+/** Fallback scale used before the container width is first measured */
+const FALLBACK_SCALE = 0.48
+/** Fallback visual card width (before container is measured) */
+const FALLBACK_CARD_WIDTH = Math.round(CARD_WIDTH * FALLBACK_SCALE)   // ~61 px
+/** Fraction of card height exposed per vertical row — rows overlap so only the
+ *  top portion of each row is visible behind the next row */
+const ROW_STEP_Y_RATIO = 0.55
 /** Extra bottom padding below the last row */
 const CONTAINER_BOTTOM_PAD = 12
 /**
@@ -47,7 +34,7 @@ export default function DeckPanel() {
   const bagClubs = clubs.filter((c) => c.id !== selectedClubId)
   const n = bagClubs.length
 
-  // Measure the container so cards spread across the full width
+  // Measure the container so cards fill the full width
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerWidth, setContainerWidth] = useState(0)
   useEffect(() => {
@@ -62,9 +49,20 @@ export default function DeckPanel() {
     return () => ro.disconnect()
   }, [])
 
+  // Card size is derived from container width: each card occupies 1/CARDS_PER_ROW of the
+  // available width so all 7 cards in a row fill the full deck area.
+  const { scaledCardWidth, scale, scaledCardHeight, rowStepY } = useMemo(() => {
+    const w = containerWidth > 0
+      ? Math.floor(containerWidth / CARDS_PER_ROW)
+      : FALLBACK_CARD_WIDTH
+    const s = w / CARD_WIDTH
+    const h = Math.round(CARD_HEIGHT * s)
+    return { scaledCardWidth: w, scale: s, scaledCardHeight: h, rowStepY: Math.round(h * ROW_STEP_Y_RATIO) }
+  }, [containerWidth])
+
   // Multi-row layout: at most CARDS_PER_ROW per row, rows overlap vertically
   const numRows = Math.ceil(n / CARDS_PER_ROW)
-  const containerHeight = SCALED_CARD_HEIGHT + (numRows - 1) * ROW_STEP_Y + CONTAINER_BOTTOM_PAD
+  const containerHeight = scaledCardHeight + (numRows - 1) * rowStepY + CONTAINER_BOTTOM_PAD
 
   const handleClubClick = (club: Club) => {
     dispatch(selectClub(club.id))
@@ -84,16 +82,6 @@ export default function DeckPanel() {
         {bagClubs.map((club, idx) => {
           const rowIdx = Math.floor(idx / CARDS_PER_ROW)
           const posInRow = idx % CARDS_PER_ROW
-          const cardsInRow = Math.min(CARDS_PER_ROW, n - rowIdx * CARDS_PER_ROW)
-
-          // Horizontal step: available spread width for this row excludes the row's starting
-          // offset and one card width (for the last card), so the guard is simply > 0.
-          const spreadWidth = containerWidth - rowIdx * ROW_OFFSET_X - SCALED_CARD_WIDTH
-          const rowSpread =
-            cardsInRow > 1 && spreadWidth > 0
-              ? spreadWidth / (cardsInRow - 1)
-              : DEFAULT_CARD_STEP
-          const rowStep = Math.min(rowSpread, MAX_CARD_STEP)
 
           // Left-to-right stacking: rightmost card has the highest z-index, like holding cards.
           // Later rows are in front of earlier rows via Z_ROW_STRIDE.
@@ -104,10 +92,10 @@ export default function DeckPanel() {
               key={club.id}
               sx={{
                 position: 'absolute',
-                top: rowIdx * ROW_STEP_Y,
-                left: rowIdx * ROW_OFFSET_X + posInRow * rowStep,
-                width: SCALED_CARD_WIDTH,
-                height: SCALED_CARD_HEIGHT,
+                top: rowIdx * rowStepY,
+                left: posInRow * scaledCardWidth,
+                width: scaledCardWidth,
+                height: scaledCardHeight,
                 overflow: 'hidden',
                 zIndex,
                 transition: 'transform 0.15s ease',
@@ -121,8 +109,8 @@ export default function DeckPanel() {
                 },
               }}
             >
-              {/* Inner box scales the full card to fit the SCALED_CARD footprint */}
-              <Box sx={{ transform: `scale(${SCALE})`, transformOrigin: 'top left' }}>
+              {/* Inner box scales the full card to fit the dynamic card footprint */}
+              <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
                 <ClubCard
                   club={club}
                   golfer={golfer}
