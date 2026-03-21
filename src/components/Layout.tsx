@@ -112,7 +112,7 @@ export default function Layout() {
           square
           sx={{
             flex: isNewGame ? 1 : 2,
-            overflow: 'auto',
+            overflow: 'hidden',
             bgcolor: 'background.default',
             ...(!isNewGame && { borderRight: 1, borderColor: 'divider' }),
           }}
