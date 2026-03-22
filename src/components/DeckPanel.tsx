@@ -111,12 +111,15 @@ export default function DeckPanel() {
               }}
             >
               {/* Inner box scales the full card to fit the dynamic card footprint.
-                  On hover the scale grows to 125% so the card is more readable. */}
+                  On hover the scale grows to 140% so the card is more readable. */}
               <Box
                 sx={{
-                  transform: `scale(${isHovered ? scale * 1.25 : scale})`,
+                  transform: `scale(${isHovered ? scale * 1.4 : scale})`,
                   transformOrigin: 'top left',
-                  transition: 'transform 0.15s ease',
+                  transition: 'transform 0.15s ease, filter 0.15s ease',
+                  filter: isHovered
+                    ? 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))'
+                    : 'none',
                 }}
               >
                 <ClubCard
