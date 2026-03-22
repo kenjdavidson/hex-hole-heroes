@@ -75,13 +75,15 @@ export default function ShotOverlay() {
           borderRadius: 2,
           p: 2,
           minHeight: Math.round(CARD_HEIGHT * SELECTED_CARD_SCALE) + 32,
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         {!selectedClub ? (
           <Box
             aria-label="club placeholder"
             sx={{
-              height: '100%',
+              width: '100%',
               minHeight: CARD_HEIGHT,
               display: 'flex',
               alignItems: 'center',
@@ -94,7 +96,7 @@ export default function ShotOverlay() {
           </Box>
         ) : (
           /* Two-column layout: card (left) + dice controls (right) inside the border */
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', width: '100%' }}>
             {/* Card scaled 20% larger, container sized to match visual footprint */}
             <Box
               sx={{

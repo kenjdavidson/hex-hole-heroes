@@ -80,6 +80,14 @@ describe('Layout', () => {
     expect(screen.getByText('?')).toBeInTheDocument()
   })
 
+  it('renders a GitHub link button', () => {
+    renderLayout()
+    const link = screen.getByRole('link', { name: /view on github/i })
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://github.com/kenjdavidson/hex-hole-heroes')
+    expect(link).toHaveAttribute('target', '_blank')
+  })
+
   it('renders the hamburger menu button', () => {
     renderLayout()
     expect(screen.getByLabelText('open menu')).toBeInTheDocument()

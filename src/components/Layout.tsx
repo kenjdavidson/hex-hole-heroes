@@ -2,11 +2,13 @@ import { useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
+import GitHubIcon from '@mui/icons-material/GitHub'
 import MenuIcon from '@mui/icons-material/Menu'
 import HexagonIcon from '@mui/icons-material/Hexagon'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
@@ -80,7 +82,19 @@ export default function Layout() {
             Hex Hole Heroes
           </Typography>
 
-          {/* Right: Hamburger menu */}
+          {/* Right: GitHub link + Hamburger menu */}
+          <Tooltip title="View on GitHub">
+            <IconButton
+              color="inherit"
+              aria-label="view on GitHub"
+              component="a"
+              href="https://github.com/kenjdavidson/hex-hole-heroes"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GitHubIcon />
+            </IconButton>
+          </Tooltip>
           <IconButton
             color="inherit"
             aria-label="open menu"
