@@ -59,6 +59,16 @@ describe('DeckPanel', () => {
     expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(13)
   })
 
+  it('hovering a card keeps it in the document and does not affect other cards', async () => {
+    const user = userEvent.setup()
+    renderWithStore(<DeckPanel />)
+    const driver = screen.getByLabelText(/Driver, Wood/)
+    await user.hover(driver)
+    // Card stays rendered and all 14 cards remain in the bag
+    expect(driver).toBeInTheDocument()
+    expect(screen.getAllByLabelText(/distance .+ hexes/)).toHaveLength(14)
+  })
+
   it('selecting a different club returns the previous one to the bag', async () => {
     const user = userEvent.setup()
     renderWithStore(<DeckPanel />)
