@@ -37,6 +37,7 @@ export default function DeckPanel() {
   // Measure the container so cards fill the full width
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerWidth, setContainerWidth] = useState(0)
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -87,30 +88,37 @@ export default function DeckPanel() {
           // Later rows are in front of earlier rows via Z_ROW_STRIDE.
           const zIndex = rowIdx * Z_ROW_STRIDE + posInRow + 1
 
+          const isHovered = hoveredIdx === idx
+
           return (
             <Box
               key={club.id}
+              // Mouse events track the hovered slot directly.
+              // Focus/blur bubble up from the inner ClubCard (tabIndex=0),
+              // so keyboard navigation triggers the same scale-up effect.
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              onFocus={() => setHoveredIdx(idx)}
+              onBlur={() => setHoveredIdx(null)}
               sx={{
                 position: 'absolute',
                 top: rowIdx * rowStepY,
                 left: posInRow * scaledCardWidth,
                 width: scaledCardWidth,
                 height: scaledCardHeight,
-                overflow: 'hidden',
-                zIndex,
-                transition: 'transform 0.15s ease',
-                '&:hover': {
-                  zIndex: numRows * Z_ROW_STRIDE + 10,
-                  transform: 'translateY(-8px)',
-                },
-                '&:focus-within': {
-                  zIndex: numRows * Z_ROW_STRIDE + 10,
-                  transform: 'translateY(-8px)',
-                },
+                overflow: isHovered ? 'visible' : 'hidden',
+                zIndex: isHovered ? numRows * Z_ROW_STRIDE + 10 : zIndex,
               }}
             >
-              {/* Inner box scales the full card to fit the dynamic card footprint */}
-              <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+              {/* Inner box scales the full card to fit the dynamic card footprint.
+                  On hover the scale grows to 125% so the card is more readable. */}
+              <Box
+                sx={{
+                  transform: `scale(${isHovered ? scale * 1.25 : scale})`,
+                  transformOrigin: 'top left',
+                  transition: 'transform 0.15s ease',
+                }}
+              >
                 <ClubCard
                   club={club}
                   golfer={golfer}
