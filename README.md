@@ -49,6 +49,40 @@ npm run test:coverage
 npm run build
 ```
 
+## Terrain pieces
+
+The `src/components/tiles` exports are reusable React-Konva pieces for a
+`Layer`. Each takes an axial `origin` and an optional clockwise `rotation` in
+degrees. Use multiples of 60° when the rotated hexes must align with the board
+grid; other angles are visual rotations and do not align to that grid.
+
+- `FairwayPiece` offers `straight` (6×20), `short` (6×10), `long` (6×12),
+  `dogleg-left`, `dogleg-right`, and `split` shapes. Pieces can be placed
+  together, with hazards drawn afterward to overlay them.
+- `GreenPiece` offers `round` (default), `square`, `oval`, `long`, `bean`, and
+  `flower`. Each includes a pin at the origin and a one-hex fairway fringe.
+- `BunkerPiece` and `WaterPiece` accept `rectangle`, `flower`, or `bean` shapes.
+  Rectangle and bean sizes use positive integer `width` and `height` in hexes;
+  flower is a fixed seven-hex shape. Omitting these props preserves their
+  original small shapes. Specifying a shape or size defaults to 2×2 for
+  bunkers and 6×2 for water. Invalid dimensions use those defaults.
+- `TeePiece` is a rectangular tee. The existing fairway and tree pieces remain
+  available individually.
+
+For example:
+
+```tsx
+<Layer>
+  <FairwayPiece origin={{ q: 15, r: 12 }} shape="straight" />
+  <GreenPiece origin={{ q: 27, r: 12 }} shape="oval" />
+  <WaterPiece origin={{ q: 20, r: 12 }} width={8} height={2} />
+  <BunkerPiece origin={{ q: 28, r: 15 }} shape="flower" />
+</Layer>
+```
+
+These are rendering components; placing them does not yet update gameplay
+terrain or add them to the board automatically.
+
 ## State Management
 
 The app uses **two separate stores** that manage different concerns:
