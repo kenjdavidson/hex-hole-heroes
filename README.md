@@ -80,8 +80,17 @@ For example:
 </Layer>
 ```
 
+The board loads `src/data/hole1.json` by default. A hole blueprint has an
+`id`, `par`, numeric `default_wind`, and a `tiles` array. Each tile has a
+`type`, an axial `{ "q", "r" }` origin, and a clockwise `rotation` in degrees.
+The supported types are defined in `src/types/hole.ts`; the corresponding
+pieces use their default shapes, except `fairway-short`, which uses the short
+fairway shape. Tiles are drawn in array order, so later
+pieces overlay earlier ones. Use multiples of 60° to keep hexes aligned.
+The ball starts at the first tee's origin whenever a hole is loaded.
+
 These are rendering components; placing them does not yet update gameplay
-terrain or add them to the board automatically.
+terrain. The blueprint's `par` and `default_wind` are data only for now.
 
 ## State Management
 
