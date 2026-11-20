@@ -2,13 +2,10 @@ import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter } from '../../utils/hexGrid'
 import { PieceProps } from './pieceTypes'
 import { TerrainColors } from './terrainColors'
+import { FAIRWAY_LINE } from './terrainOffsets'
 
 /** Three hexes in a straight horizontal axial line; origin is the middle hex. */
-const OFFSETS = [
-  { dq: -1, dr: 0 },
-  { dq: 0, dr: 0 },
-  { dq: 1, dr: 0 },
-]
+const OFFSETS = FAIRWAY_LINE
 
 export default function FairwayLinePiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)

@@ -2,17 +2,10 @@ import { Group, Line } from 'react-konva'
 import { HexTile, getHexCenter } from '../../utils/hexGrid'
 import { PieceProps } from './pieceTypes'
 import { TerrainColors } from './terrainColors'
+import { FAIRWAY_FLOWER } from './terrainOffsets'
 
 /** Center hex plus its six neighbors (pointy-top axial offsets). */
-const OFFSETS = [
-  { dq: 0, dr: 0 },
-  { dq: 1, dr: 0 },
-  { dq: 1, dr: -1 },
-  { dq: 0, dr: -1 },
-  { dq: -1, dr: 0 },
-  { dq: -1, dr: 1 },
-  { dq: 0, dr: 1 },
-]
+const OFFSETS = FAIRWAY_FLOWER
 
 export default function FairwayFlowerPiece({ origin, rotation = 0 }: PieceProps) {
   const { x, y } = getHexCenter(origin.q, origin.r)

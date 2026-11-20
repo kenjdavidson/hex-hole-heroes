@@ -65,6 +65,12 @@ describe('HexBoard', () => {
     expect(hexEls).toHaveLength(4800)
   })
 
+  it('renders the requested dimensions for a generated hole', () => {
+    render(<HexBoard columns={42} rows={36} />)
+    const rough = screen.getAllByTestId('hex').filter((el) => el.getAttribute('data-fill') === '#5C7A2E')
+    expect(rough).toHaveLength(42 * 36)
+  })
+
   it('renders the blueprint pieces at their origins with their rotations', () => {
     render(<HexBoard />)
     const pieces = screen.getAllByTestId('piece')
