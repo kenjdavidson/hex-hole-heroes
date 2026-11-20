@@ -41,4 +41,11 @@ describe('WaterPiece', () => {
     render(<WaterPiece origin={{ q: 0, r: 0 }} rotation={60} />)
     expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('60')
   })
+
+  it('supports a long creek and an irregular pond', () => {
+    const { rerender } = render(<WaterPiece origin={{ q: 0, r: 0 }} width={10} height={2} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(20)
+    rerender(<WaterPiece origin={{ q: 0, r: 0 }} shape="bean" width={6} height={3} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(17)
+  })
 })

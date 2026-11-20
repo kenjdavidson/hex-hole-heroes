@@ -41,4 +41,16 @@ describe('BunkerPiece', () => {
     render(<BunkerPiece origin={{ q: 0, r: 0 }} rotation={30} />)
     expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('30')
   })
+
+  it('supports larger and flower-shaped bunkers', () => {
+    const { rerender } = render(<BunkerPiece origin={{ q: 0, r: 0 }} width={6} height={3} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(18)
+    rerender(<BunkerPiece origin={{ q: 0, r: 0 }} shape="flower" />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(7)
+  })
+
+  it('falls back to valid dimensions for invalid sizes', () => {
+    render(<BunkerPiece origin={{ q: 0, r: 0 }} width={0} height={-1} />)
+    expect(screen.getAllByTestId('hex')).toHaveLength(4)
+  })
 })

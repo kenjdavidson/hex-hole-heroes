@@ -1,7 +1,7 @@
-import { Group, Line } from 'react-konva'
-import { HexTile, getHexCenter } from '../../utils/hexGrid'
+import TerrainPiece from './TerrainPiece'
 import { PieceProps } from './pieceTypes'
 import { TerrainColors } from './terrainColors'
+import { hazardDimension, hazardOffsets, HazardShape } from './terrainShapes'
 
 /** Three hexes in a compact triangle; origin is the "top-left" hex. */
 const OFFSETS = [
@@ -10,25 +10,21 @@ const OFFSETS = [
   { dq: 0, dr: 1 },
 ]
 
-export default function WaterPiece({ origin, rotation = 0 }: PieceProps) {
-  const { x, y } = getHexCenter(origin.q, origin.r)
+interface WaterPieceProps extends PieceProps {
+  shape?: HazardShape
+  width?: number
+  height?: number
+}
 
+export default function WaterPiece({ shape, width, height, ...props }: WaterPieceProps) {
   return (
-    <Group x={x} y={y} rotation={rotation}>
-      {OFFSETS.map(({ dq, dr }) => {
-        const hex = new HexTile({ q: origin.q + dq, r: origin.r + dr })
-        const points = hex.corners.flatMap((c) => [c.x - x, c.y - y])
-        return (
-          <Line
-            key={`${dq},${dr}`}
-            points={points}
-            closed
-            fill={TerrainColors.WATER_FILL}
-            stroke={TerrainColors.WATER_STROKE}
-            strokeWidth={1}
-          />
-        )
-      })}
-    </Group>
+    <TerrainPiece
+      {...props}
+      offsets={shape || width !== undefined || height !== undefined
+        ? hazardOffsets(shape ?? 'rectangle', hazardDimension(width, 6), hazardDimension(height, 2))
+        : OFFSETS}
+      fill={TerrainColors.WATER_FILL}
+      stroke={TerrainColors.WATER_STROKE}
+    />
   )
 }

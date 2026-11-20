@@ -20,13 +20,14 @@ vi.mock('react-konva', () => ({
 describe('GreenPiece', () => {
   it('renders 19 hexes (Mega-Flower: center + 2 rings)', () => {
     render(<GreenPiece origin={{ q: 0, r: 0 }} />)
-    expect(screen.getAllByTestId('hex')).toHaveLength(19)
+    expect(screen.getAllByTestId('hex').filter((hex) => hex.getAttribute('data-fill') === '#7CFC00')).toHaveLength(19)
   })
 
   it('renders hexes with lawn-green fill', () => {
     render(<GreenPiece origin={{ q: 0, r: 0 }} />)
     const hexes = screen.getAllByTestId('hex')
-    expect(hexes.every((h) => h.getAttribute('data-fill') === '#7CFC00')).toBe(true)
+    expect(hexes.filter((h) => h.getAttribute('data-fill') === '#7CFC00')).toHaveLength(19)
+    expect(hexes.filter((h) => h.getAttribute('data-fill') === '#228B22')).toHaveLength(18)
   })
 
   it('renders all closed polygons', () => {
@@ -53,5 +54,13 @@ describe('GreenPiece', () => {
   it('applies a custom rotation', () => {
     render(<GreenPiece origin={{ q: 0, r: 0 }} rotation={45} />)
     expect(screen.getByTestId('group').getAttribute('data-rotation')).toBe('45')
+  })
+
+  it('renders the selected green shape with a fairway fringe and a pin', () => {
+    render(<GreenPiece origin={{ q: 4, r: 5 }} shape="flower" />)
+    const hexes = screen.getAllByTestId('hex')
+    expect(hexes.filter((hex) => hex.getAttribute('data-fill') === '#7CFC00')).toHaveLength(7)
+    expect(hexes.filter((hex) => hex.getAttribute('data-fill') === '#228B22')).toHaveLength(12)
+    expect(screen.getByTestId('pin')).toBeInTheDocument()
   })
 })
