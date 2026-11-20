@@ -10,6 +10,8 @@ vi.mock('react-konva', () => ({
   ),
   Rect: () => null,
   Line: () => null,
+  Group: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Circle: () => null,
 }))
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
