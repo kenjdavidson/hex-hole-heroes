@@ -2,12 +2,10 @@ import TerrainPiece from './TerrainPiece'
 import { PieceProps } from './pieceTypes'
 import { TerrainColors } from './terrainColors'
 import { hazardDimension, hazardOffsets, HazardShape } from './terrainShapes'
+import { BUNKER } from './terrainOffsets'
 
 /** Two adjacent hexes; origin is the first hex. */
-const OFFSETS = [
-  { dq: 0, dr: 0 },
-  { dq: 1, dr: 0 },
-]
+const OFFSETS = BUNKER
 
 interface BunkerPieceProps extends PieceProps {
   shape?: HazardShape

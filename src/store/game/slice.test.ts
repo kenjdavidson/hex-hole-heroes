@@ -91,6 +91,8 @@ describe('gameSlice', () => {
       expect(game?.golfer).toEqual(sampleGolfer)
       expect(game?.clubs).toEqual([sampleClub])
       expect(game?.holes).toBe(9)
+      expect(game?.currentHole?.tiles.some((tile) => tile.type === 'tee')).toBe(true)
+      expect(game?.currentHole?.tiles.some((tile) => tile.type === 'green')).toBe(true)
     })
 
     it('assigns a numeric id to the game', () => {
@@ -175,6 +177,7 @@ describe('gameSlice', () => {
       const parsed = JSON.parse(stored!)
       expect(parsed.golfer.id).toBe(sampleGolfer.id)
       expect(parsed.holes).toBe(9)
+      expect(parsed.currentHole).toEqual(selectActiveGame(store.getState() as TestState)?.currentHole)
     })
 
     it('removes activeGame from localStorage on clearGame', () => {

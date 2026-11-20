@@ -2,13 +2,10 @@ import TerrainPiece from './TerrainPiece'
 import { PieceProps } from './pieceTypes'
 import { TerrainColors } from './terrainColors'
 import { hazardDimension, hazardOffsets, HazardShape } from './terrainShapes'
+import { WATER } from './terrainOffsets'
 
 /** Three hexes in a compact triangle; origin is the "top-left" hex. */
-const OFFSETS = [
-  { dq: 0, dr: 0 },
-  { dq: 1, dr: 0 },
-  { dq: 0, dr: 1 },
-]
+const OFFSETS = WATER
 
 interface WaterPieceProps extends PieceProps {
   shape?: HazardShape
