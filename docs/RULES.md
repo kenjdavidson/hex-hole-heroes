@@ -67,6 +67,20 @@ Complete each hole in as few strokes as possible. The player with the lowest tot
 
 ---
 
+## Procedural Holes
+
+A new game starts on a generated 42×36 hex hole. The tee is in the bottom four
+rows and the green is in the top four; their full terrain pieces fit on the
+board. Three to five line or flower fairway clusters form doglegs between
+them, with successive tee, fairway and green anchors 6–10 hexes apart.
+Rough neighbors of the fairway have a 15% hazard check: rolls in the first
+10% place a two-hex bunker, and rolls in the next 5% place a three-hex water
+hazard, provided the whole piece fits on unoccupied terrain. A two-hex-wide
+rough or fairway corridor along the route is kept free of hazards for recovery
+shots. The generated hole is saved with the game.
+
+---
+
 ## Dice Probability & Resolution
 
 ### 1. The Power Die (2D6)

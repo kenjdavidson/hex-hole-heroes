@@ -3,6 +3,8 @@ import type { RootState } from '../index'
 import type { Game } from '../../types/game'
 import type { Golfer } from '../../types/player'
 import type { Club } from '../../types/club'
+import type { Hole } from '../../types/hole'
+import { generateHole } from '../../services/holeGeneration'
 
 export type { Game } from '../../types/game'
 
@@ -36,14 +38,13 @@ const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    startGame(state, action: PayloadAction<StartGamePayload>) {
-      const { golfer, clubs, holes } = action.payload
-      state.activeGame = {
-        id: Date.now(),
-        golfer,
-        clubs,
-        holes,
-      }
+    startGame: {
+      prepare(payload: StartGamePayload) {
+        return { payload: { ...payload, id: Date.now(), currentHole: generateHole() } }
+      },
+      reducer(state, action: PayloadAction<StartGamePayload & { id: number; currentHole: Hole }>) {
+        state.activeGame = action.payload
+      },
     },
     clearGame(state) {
       state.activeGame = null

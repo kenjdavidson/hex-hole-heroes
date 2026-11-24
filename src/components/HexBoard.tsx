@@ -38,7 +38,11 @@ const ROUGH_STROKE = '#3D5E1A'
 const BALL_COLOR = '#FFFFFF'
 const BALL_STROKE = '#000000'
 
-export default function HexBoard({ hole = DEFAULT_HOLE }: { hole?: Hole }) {
+export default function HexBoard({ hole = DEFAULT_HOLE, columns = GRID_COLS, rows = GRID_ROWS }: {
+  hole?: Hole
+  columns?: number
+  rows?: number
+}) {
   const ballQ = useHexStore((s) => s.ballQ)
   const ballR = useHexStore((s) => s.ballR)
   const setBallPosition = useHexStore((s) => s.setBallPosition)
@@ -64,13 +68,13 @@ export default function HexBoard({ hole = DEFAULT_HOLE }: { hole?: Hole }) {
   }, [])
 
   const { hexes, stageWidth, stageHeight } = useMemo(() => {
-    const grid = new Grid(HexTile, rectangle({ width: GRID_COLS, height: GRID_ROWS }))
+    const grid = new Grid(HexTile, rectangle({ width: columns, height: rows }))
     return {
       hexes: grid.toArray(),
       stageWidth: Math.ceil(grid.pixelWidth),
       stageHeight: Math.ceil(grid.pixelHeight),
     }
-  }, [])
+  }, [columns, rows])
 
   const displayWidth = containerSize.width || stageWidth
   const displayHeight = containerSize.height || stageHeight
