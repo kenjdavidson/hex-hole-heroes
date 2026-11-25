@@ -7,6 +7,7 @@ export type { Golfer, SpecialAbility, PlayerUI, PlayerStats } from '../types/pla
 
 interface PlayerState {
   selectedGolfer: Golfer | null
+  activeGolfer: Golfer | null
   availableGolfers: Golfer[]
 }
 
@@ -24,6 +25,7 @@ function computeInitials(name: string): string {
 
 const initialState: PlayerState = {
   selectedGolfer: null,
+  activeGolfer: null,
   availableGolfers: playersData.players.map((p) => ({
     ...p,
     initials: computeInitials(p.name),
@@ -36,14 +38,21 @@ const playerSlice = createSlice({
   reducers: {
     setSelectedGolfer(state, action: PayloadAction<Golfer | null>) {
       state.selectedGolfer = action.payload
+      state.activeGolfer = action.payload
+    },
+    setActiveGolfer(state, action: PayloadAction<Golfer | null>) {
+      state.activeGolfer = action.payload
     },
   },
 })
 
-export const { setSelectedGolfer } = playerSlice.actions
+export const { setSelectedGolfer, setActiveGolfer } = playerSlice.actions
 
 export const selectSelectedGolfer = (state: RootState) =>
   state.player.selectedGolfer
+
+export const selectActiveGolfer = (state: RootState) =>
+  state.player.activeGolfer ?? state.player.selectedGolfer
 
 export const selectAvailableGolfers = (state: RootState) =>
   state.player.availableGolfers

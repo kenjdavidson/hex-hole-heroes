@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import playerReducer, {
   setSelectedGolfer,
+  setActiveGolfer,
   selectSelectedGolfer,
+  selectActiveGolfer,
   selectAvailableGolfers,
 } from './playerSlice'
 import { configureStore } from '@reduxjs/toolkit'
@@ -81,6 +83,16 @@ describe('playerSlice', () => {
     const store = makeStore()
     store.dispatch(setSelectedGolfer(sampleGolfer))
     expect(selectSelectedGolfer(store.getState() as TestState)).toEqual(sampleGolfer)
+    expect(selectActiveGolfer(store.getState() as TestState)).toEqual(sampleGolfer)
+  })
+
+  it('updates the active golfer independently from the selected golfer', () => {
+    const store = makeStore()
+    store.dispatch(setSelectedGolfer(sampleGolfer))
+    const alternateGolfer = { ...sampleGolfer, id: 'boomer-benson', name: "'Boomer' Benson" }
+    store.dispatch(setActiveGolfer(alternateGolfer))
+    expect(selectSelectedGolfer(store.getState() as TestState)).toEqual(sampleGolfer)
+    expect(selectActiveGolfer(store.getState() as TestState)).toEqual(alternateGolfer)
   })
 
   it('clears the selected golfer when null is dispatched', () => {
@@ -88,6 +100,7 @@ describe('playerSlice', () => {
     store.dispatch(setSelectedGolfer(sampleGolfer))
     store.dispatch(setSelectedGolfer(null))
     expect(selectSelectedGolfer(store.getState() as TestState)).toBeNull()
+    expect(selectActiveGolfer(store.getState() as TestState)).toBeNull()
   })
 
   describe('reducer', () => {

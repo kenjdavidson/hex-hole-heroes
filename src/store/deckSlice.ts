@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { RootState } from './index'
 import deckData from '../data/deck.json'
+import clubStats, { getClubStats } from '../data/clubStats'
 import type { Club, ClubType, Deck } from '../types/club'
 
 export type { Club, ClubType, Deck } from '../types/club'
@@ -29,5 +30,9 @@ export const selectClubsByType =
   (type: ClubType) =>
   (state: RootState): Club[] =>
     state.deck.clubs.filter((c) => c.type === type)
+
+export const selectClubStats = (id: string) => getClubStats(id)
+
+export { clubStats }
 
 export default deckSlice.reducer

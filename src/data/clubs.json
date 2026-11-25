@@ -1,0 +1,16 @@
+[
+  { "id": "dr", "name": "Driver", "category": "Wood", "type": "Wood", "range": [12, 15], "dist": [12, 15], "scatter": 2, "ability": "Power Draw: +2 Hexes on Fairway" },
+  { "id": "3w", "name": "3-Wood", "category": "Wood", "type": "Wood", "range": [10, 12], "dist": [10, 12], "scatter": 1, "ability": "Fairway Finder: Negate 1 Wind" },
+  { "id": "5w", "name": "5-Wood", "category": "Wood", "type": "Wood", "range": [9, 11], "dist": [9, 11], "scatter": 1, "ability": "High Launch: Ignore Trees" },
+  { "id": "3i", "name": "3-Iron", "category": "Iron", "type": "Iron", "range": [9, 9], "dist": [9, 9], "scatter": 1, "ability": "Stinger: Ignore Wind" },
+  { "id": "4i", "name": "4-Iron", "category": "Iron", "type": "Iron", "range": [8, 8], "dist": [8, 8], "scatter": 1, "ability": null },
+  { "id": "5i", "name": "5-Iron", "category": "Iron", "type": "Iron", "range": [7, 7], "dist": [7, 7], "scatter": 1, "ability": null },
+  { "id": "6i", "name": "6-Iron", "category": "Iron", "type": "Iron", "range": [6, 6], "dist": [6, 6], "scatter": 1, "ability": null },
+  { "id": "7i", "name": "7-Iron", "category": "Iron", "type": "Iron", "range": [5, 5], "dist": [5, 5], "scatter": 0, "ability": "Backspin: Move 1 hex back on Green" },
+  { "id": "8i", "name": "8-Iron", "category": "Iron", "type": "Iron", "range": [4, 4], "dist": [4, 4], "scatter": 0, "ability": null },
+  { "id": "9i", "name": "9-Iron", "category": "Iron", "type": "Iron", "range": [3, 3], "dist": [3, 3], "scatter": 0, "ability": "Drop & Stop: No roll-out on Green" },
+  { "id": "pw", "name": "Pitching Wedge", "category": "Wedge", "type": "Wedge", "range": [2, 3], "dist": [2, 3], "scatter": 0, "ability": null },
+  { "id": "gw", "name": "Gap Wedge", "category": "Wedge", "type": "Wedge", "range": [2, 2], "dist": [2, 2], "scatter": 0, "ability": "Approach: +1 Accuracy Die" },
+  { "id": "sw", "name": "Sand Wedge", "category": "Wedge", "type": "Wedge", "range": [1, 2], "dist": [1, 2], "scatter": 0, "ability": "Bunker King: Exit Sand easily" },
+  { "id": "pt", "name": "Putter", "category": "Putter", "type": "Putter", "range": [1, 5], "dist": [1, 5], "scatter": 0, "ability": "Green Only: Accuracy Die logic" }
+]

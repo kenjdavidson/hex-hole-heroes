@@ -6,6 +6,7 @@ import deckReducer, {
   selectAllClubs,
   selectDeckVersion,
   selectClubsByType,
+  selectClubStats,
 } from './deckSlice'
 import shotReducer from './shotSlice'
 import gameReducer from './game'
@@ -98,6 +99,21 @@ describe('deckSlice', () => {
       const putters = selectClubsByType('Putter')(state)
       expect(putters).toHaveLength(1)
       expect(putters[0].id).toBe('pt')
+    })
+  })
+
+  describe('selectClubStats', () => {
+    it('loads range and category from the club stats lookup', () => {
+      const driver = selectClubStats('dr')
+      expect(driver).toMatchObject({ id: 'dr', type: 'Wood', category: 'Wood', range: [12, 15] })
+      expect(driver?.scatter).toBe(2)
+
+      const putter = selectClubStats('pt')
+      expect(putter).toMatchObject({ id: 'pt', type: 'Putter', category: 'Putter', range: [1, 5] })
+    })
+
+    it('returns undefined for missing club ids', () => {
+      expect(selectClubStats('missing')).toBeUndefined()
     })
   })
 

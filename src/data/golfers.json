@@ -1,0 +1,84 @@
+[
+  {
+    "id": "ace",
+    "name": "Ace",
+    "specialty": "The Pro",
+    "modifier": {
+      "type": "power",
+      "value": 1,
+      "max": 12,
+      "label": "+1 to all Power Rolls (Max 12)"
+    },
+    "icon": "ace.png",
+    "category": "Pro",
+    "range": [1, 12]
+  },
+  {
+    "id": "boomer",
+    "name": "Boomer",
+    "specialty": "Long Drive",
+    "modifier": {
+      "type": "wood",
+      "value": 2,
+      "powerPenalty": 1,
+      "label": "Woods gain +2 Base Range, but -1 to Power Rolls"
+    },
+    "icon": "boomer.png",
+    "category": "Driver",
+    "range": [2, 15]
+  },
+  {
+    "id": "calamity",
+    "name": "Calamity",
+    "specialty": "Recovery",
+    "modifier": {
+      "type": "terrain",
+      "value": 0.5,
+      "label": "Rough/Bunker penalties are halved"
+    },
+    "icon": "calamity.png",
+    "category": "Recovery",
+    "range": [0.5, 1]
+  },
+  {
+    "id": "duff",
+    "name": "Duff",
+    "specialty": "The Rookie",
+    "modifier": {
+      "type": "reroll",
+      "value": 2,
+      "oncePerHole": true,
+      "label": "Re-roll any '2' on Power (Once per hole)"
+    },
+    "icon": "duff.png",
+    "category": "Rookie",
+    "range": [1, 2]
+  },
+  {
+    "id": "shank",
+    "name": "Shank",
+    "specialty": "High Risk",
+    "modifier": {
+      "type": "power",
+      "value": 4,
+      "whenRoll": 12,
+      "label": "12 on Power adds +4 Hexes instead of +2"
+    },
+    "icon": "shank.png",
+    "category": "Risk",
+    "range": [2, 4]
+  },
+  {
+    "id": "putter-pete",
+    "name": "Putter Pete",
+    "specialty": "Green King",
+    "modifier": {
+      "type": "putting",
+      "value": 2,
+      "label": "+2 to all D12 Putting rolls"
+    },
+    "icon": "putter-pete.png",
+    "category": "Putting",
+    "range": [2, 12]
+  }
+]
